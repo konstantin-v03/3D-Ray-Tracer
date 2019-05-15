@@ -1,0 +1,7 @@
+*
+!.gitignore
+!Ray-Traycer/
+!Ray-Traycer/**
+Ray-Traycer/**
+!Ray-Traycer/*.c
+!Ray-Traycer/*.h
