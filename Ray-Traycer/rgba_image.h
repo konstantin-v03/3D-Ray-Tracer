@@ -2,17 +2,22 @@
 
 #define BMP_TYPE 1
 
-struct rgba_image {
+#define BMP_RGB 1
+#define BMP_RGBA 2
+
+struct Rgba_image {
 	int width;
 	int height;
 	int format;
 	uint32_t** RGBA;
 };
 
-typedef struct rgba_image rgba_image;
+typedef struct Rgba_image Rgba_image;
 
-rgba_image* read_rgba(char* file_name, int type);
+Rgba_image* create_rgba(int width, int height, int format);
 
-int write_rgba(char* file_name, rgba_image* image, int type);
+Rgba_image* read_rgba(char* file_name, int type);
 
-void free_rgba_image(rgba_image* image);
+int write_rgba(char* file_name, Rgba_image* rgba_image, int type);
+
+void free_rgba_image(Rgba_image* rgba_image);

@@ -1,54 +1,54 @@
 #include <stdint.h>
 #include "array_list.h"
 
-void array_list_expand(array_list* array);
+void array_list_expand(Array_list* array);
 
-array_list* array_list_init() {
-	array_list* array = malloc(sizeof(array_list));
+Array_list* array_list_init() {
+	Array_list* array_list = malloc(sizeof(Array_list));
+	
+	array_list->size = ARRAY_LIST_INITIAL_SIZE;
+	array_list->filled_size = 0;
+	array_list->arr = calloc(array_list->size, sizeof(void*));
 
-	array->size = ARRAY_LIST_INITIAL_SIZE;
-	array->filled_size = 0;
-	array->arr = calloc(array->size, sizeof(void*));
-
-	return array;
+	return array_list;
 }
 
-void array_list_add(array_list* array, void* ptr) {
-	if (array->filled_size >= array->size)
-		array_list_expand(array);
+void array_list_add(Array_list* array_list, void* ptr) {
+	if (array_list->filled_size >= array_list->size)
+		array_list_expand(array_list);
 
-	array->arr[array->filled_size] = ptr;
-	array->filled_size++;
+	array_list->arr[array_list->filled_size] = ptr;
+	array_list->filled_size++;
 }
 
-void* array_list_get(array_list* array, int index) {
-	if (index < 0 || index >= array->filled_size)
+void* array_list_get(Array_list* array_list, int index) {
+	if (index < 0 || index >= array_list->filled_size)
 		return NULL;
-	return array->arr[index];
+	return array_list->arr[index];
 }
 
-void array_list_remove(array_list* array, int index) {
-	if (index < 0 || index >= array->filled_size)
+void array_list_remove(Array_list* array_list, int index) {
+	if (index < 0 || index >= array_list->filled_size)
 		return;
 
-	for (int i = index; i < array->filled_size - 1; i++) {
-		array->arr[i] = array->arr[i + 1];
+	for (int i = index; i < array_list->filled_size - 1; i++) {
+		array_list->arr[i] = array_list->arr[i + 1];
 	}
 
-	array->filled_size--;
+	array_list->filled_size--;
 }
 
-static void array_list_expand(array_list* array) {
-	int new_size =  array->size + ARRAY_LIST_SIZE_EXPAND_ADDEND;
+static void array_list_expand(Array_list* array_list) {
+	int new_size = array_list->size + ARRAY_LIST_SIZE_EXPAND_ADDEND;
 
 	void** arr1 = calloc(new_size, sizeof(void*));
 
-	for (int i = 0; i < array->size; i++) {
-		arr1[i] = array->arr[i];
+	for (int i = 0; i < array_list->size; i++) {
+		arr1[i] = array_list->arr[i];
 	}
 
-	free(array->arr);
+	free(array_list->arr);
 	
-	array->size = new_size;
-	array->arr = arr1;
+	array_list->size = new_size;
+	array_list->arr = arr1;
 }

@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include "scene.h"
 
-void free_scene(scene* scene) {
+void free_scene(Scene* scene) {
 	if (scene == NULL)
 		return;
 

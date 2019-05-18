@@ -1,30 +1,30 @@
 #ifndef VECTOR3
 #define VECTOR3
 
-struct vector3 {
+struct Vector3 {
 	float x;
 	float y;
 	float z;
 };
 
-typedef struct vector3 vector3;
+typedef struct Vector3 Vector3;
 
-float vector_dot(vector3* vector1, vector3* vector2);
+float vector3_dot(Vector3* vector1, Vector3* vector2);
 
-float vector_norm(vector3* vector);
+float vector3_norm(Vector3* vector);
 
-vector3* vector_times(vector3* vector, float scalar);
+Vector3* vector3_times(Vector3* vector, float scalar);
 
-vector3* vector_plus(vector3* vector1, vector3* vector2);
+Vector3* vector3_plus(Vector3* vector1, Vector3* vector2);
 
-vector3* vector_minus(vector3* vector1, vector3* vector2);
+Vector3* vector3_minus(Vector3* vector1, Vector3* vector2);
 
-vector3* vector_inverted(vector3* vector);
+Vector3* vector3_inverted(Vector3* vector);
 
-vector3* vector_normalized(vector3* vector);
+Vector3* vector3_normalized(Vector3* vector);
 
-vector3* vector_lerp(vector3* start, vector3* end, float t);
+Vector3* vector3_lerp(Vector3* start, Vector3* end, float t);
 
-vector3* create_vector(int x, int y, int z);
+Vector3* create_vector3(int x, int y, int z);
 
 #endif

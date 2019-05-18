@@ -1,42 +1,42 @@
 #include "color.h"
 
-void color_clamped(color* color1) {
+void color_clamped(Color* color) {
 
-	if (color1->r < 0) {
-		color1->r = 0;
+	if (color->r < 0) {
+		color->r = 0;
 	}
-	else if (color1->r > MAX) {
-		color1->r = MAX;
-	}
-
-	if (color1->b < 0) {
-		color1->b = 0;
-	}
-	else if (color1->b > MAX) {
-		color1->b = MAX;
+	else if (color->r > MAX) {
+		color->r = MAX;
 	}
 
-	if (color1->g < 0) {
-		color1->g = 0;
+	if (color->b < 0) {
+		color->b = 0;
 	}
-	else if (color1->g > MAX) {
-		color1->g = MAX;
+	else if (color->b > MAX) {
+		color->b = MAX;
+	}
+
+	if (color->g < 0) {
+		color->g = 0;
+	}
+	else if (color->g > MAX) {
+		color->g = MAX;
 	}
 
 }
 
-color* color_times(color* color1, float t) {
-	color* temp = malloc(sizeof(color));
+Color* color_times(Color* color, float t) {
+	Color* temp = malloc(sizeof(Color));
 
-	temp->r = color1->r * t;
-	temp->g = color1->g * t;
-	temp->b = color1->b * t;
+	temp->r = color->r * t;
+	temp->g = color->g * t;
+	temp->b = color->b * t;
 
 	return temp;
 }
 
-color* color_times_c(color* color1, color* color2) {
-	color* temp = malloc(sizeof(color));
+Color* color_times_c(Color* color1, Color* color2) {
+	Color* temp = malloc(sizeof(Color));
 
 	temp->r = color1->r * color2->r;
 	temp->g = color1->g * color2->r;
@@ -45,8 +45,8 @@ color* color_times_c(color* color1, color* color2) {
 	return temp;
 }
 
-color*color_divide(color* color1, color* color2) {
-	color* temp = malloc(sizeof(color));
+Color*color_divide(Color* color1, Color* color2) {
+	Color* temp = malloc(sizeof(Color));
 
 	temp->r = color1->r / color2->r;
 	temp->g = color1->g / color2->r;
@@ -55,8 +55,8 @@ color*color_divide(color* color1, color* color2) {
 	return temp;
 }
 
-color* color_plus(color* color1, color* color2) {
-	color* temp = malloc(sizeof(color));
+Color* color_plus(Color* color1, Color* color2) {
+	Color* temp = malloc(sizeof(Color));
 
 	temp->r = color1->r + color2->r;
 	temp->g = color1->g + color2->r;
@@ -65,8 +65,8 @@ color* color_plus(color* color1, color* color2) {
 	return temp;
 }
 
-color* color_minus(color* color1, color* color2) {
-	color* temp = malloc(sizeof(color));
+Color* color_minus(Color* color1, Color* color2) {
+	Color* temp = malloc(sizeof(Color));
 
 	temp->r = color1->r - color2->r;
 	temp->g = color1->g - color2->r;

@@ -1,10 +1,10 @@
 #include "color.h"
 
-struct scene_object_ {
-	color* color;
+struct Scene_object {
+	Color* color;
 	void* earliest_intersection;
 };
 
-typedef struct scene_object_ scene_object;
+typedef struct Scene_object Scene_object;
 
-scene_object* create_sphere(color* color, float r);
+Scene_object* create_sphere(Color* color, float r);

@@ -1,12 +1,12 @@
 #include "color.h"
 #include "scene.h"
 
-struct ray_tracer{
-	scene* scene;
+struct Ray_tracer{
+	Scene* scene;
 	int width;
 	int height;
 };
 
-typedef struct ray_tracer ray_tracer;
+typedef struct Ray_tracer Ray_tracer;
 
-color* traced_value_at_pixel(ray_tracer* ray_tracer, int x, int y);
+Color* traced_value_at_pixel(Ray_tracer* ray_tracer, int x, int y);

@@ -1,12 +1,12 @@
 #include "vector3.h"
 
-struct ray {
-	vector3* origin;
-	vector3* dir;
+struct Ray {
+	Vector3* origin;
+	Vector3* dir;
 };
 
-typedef struct ray ray;
+typedef struct Ray Ray;
 
-vector3* ray_at(ray* ray, float t);
+Vector3* ray_at(Ray* ray, float t);
 
-void free_ray(ray* ray);
+void free_ray(Ray* ray);

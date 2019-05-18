@@ -2,26 +2,26 @@
 #include "ray_tracer.h"
 #include "ray.h"
 
-color* color_from_ray_hit(scene* scene, ray* ray);
+Color* color_from_ray_hit(Scene* scene, Ray* ray);
 
-color* traced_value_at_pixel(ray_tracer* tracer, int x, int y) {
+Color* traced_value_at_pixel(Ray_tracer* tracer, int x, int y) {
 	float xt = x / tracer->width;
 	float yt = y / tracer->height;
 
-	vector3* top = vector_lerp(tracer->scene->image_plane->top_left, tracer->scene->image_plane->top_right, xt);
+	Vector3* top = vector3_lerp(tracer->scene->image_plane->top_left, tracer->scene->image_plane->top_right, xt);
 
-	vector3* bottom = vector_lerp(tracer->scene->image_plane->bottom_left, tracer->scene->image_plane->bottom_right, xt);
+	Vector3* bottom = vector3_lerp(tracer->scene->image_plane->bottom_left, tracer->scene->image_plane->bottom_right, xt);
 
-	vector3* point = vector_lerp(top, bottom , yt);
+	Vector3* point = vector3_lerp(top, bottom , yt);
 
 	free(top);
 	free(bottom);
 
-	ray* ray = malloc(sizeof(struct ray));
+	Ray* ray = malloc(sizeof(Ray));
 	ray->origin = point;
-	ray->dir = vector_minus(point, tracer->scene->camera);
+	ray->dir = vector3_minus(point, tracer->scene->camera);
 
-	color* color = malloc(sizeof(struct color_));
+	Color* color = malloc(sizeof(Color));
 
 	color = color_from_ray_hit(tracer->scene, ray);
 
@@ -31,6 +31,6 @@ color* traced_value_at_pixel(ray_tracer* tracer, int x, int y) {
 	return color;
 }
 
-static color* color_from_ray_hit(scene* scene, ray* ray) {
+static Color* color_from_ray_hit(Scene* scene, Ray* ray) {
 	return NULL;
 }

@@ -1,21 +1,21 @@
 #define MAX 1
 
-struct color_ {
+struct Color {
 	float r;
 	float g;
 	float b;
 };
 
-typedef struct color_ color;
+typedef struct Color Color;
 
-void color_clamped(color* color1);
+void color_clamped(Color* color);
 
-color* color_times(color* color1, float t);
+Color* color_times(Color* color, float t);
 
-color* color_times_c(color* color1, color* color2);
+Color* color_times_c(Color* color1, Color* color2);
 
-color* color_divide(color* color1, color* color2);
+Color* color_divide(Color* color1, Color* color2);
 
-color* color_plus(color* color1, color* color2);
+Color* color_plus(Color* color1, Color* color2);
 
-color* color_minus(color* color1, color* color2);
+Color* color_minus(Color* color1, Color* color2);

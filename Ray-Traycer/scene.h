@@ -1,19 +1,19 @@
 #include "vector3.h"
 #include "array_list.h"
 
-struct image_plane {
-	vector3* top_left;
-	vector3* top_right;
-	vector3* bottom_left;
-	vector3* bottom_right;
+struct Image_plane {
+	Vector3* top_left;
+	Vector3* top_right;
+	Vector3* bottom_left;
+	Vector3* bottom_right;
 };
 
-typedef struct image_plane image_plane;
+typedef struct Image_plane Image_plane;
 
-struct scene {
-	vector3* camera;
-	image_plane* image_plane;
-	array_list* objects;
+struct Scene {
+	Vector3* camera;
+	Image_plane* image_plane;
+	Array_list* objects;
 };
 
-typedef struct scene scene;
+typedef struct Scene Scene;
