@@ -39,13 +39,16 @@ void array_list_remove(array_list* array, int index) {
 }
 
 static void array_list_expand(array_list* array) {
-	void** arr1 = calloc((int)(array->size * ARRAY_LIST_SIZE_EXPAND_FACTOR), sizeof(void*));
+	int new_size =  array->size + ARRAY_LIST_SIZE_EXPAND_ADDEND;
+
+	void** arr1 = calloc(new_size, sizeof(void*));
 
 	for (int i = 0; i < array->size; i++) {
 		arr1[i] = array->arr[i];
 	}
-	
-	free(array);
 
+	free(array->arr);
+	
+	array->size = new_size;
 	array->arr = arr1;
 }

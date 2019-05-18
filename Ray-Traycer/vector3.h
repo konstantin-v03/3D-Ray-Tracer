@@ -1,3 +1,6 @@
+#ifndef VECTOR3
+#define VECTOR3
+
 struct vector3 {
 	float x;
 	float y;
@@ -23,3 +26,5 @@ vector3* vector_normalized(vector3* vector);
 vector3* vector_lerp(vector3* start, vector3* end, float t);
 
 vector3* create_vector(int x, int y, int z);
+
+#endif

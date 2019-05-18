@@ -1,4 +1,4 @@
-#include<math.h>
+#include <math.h>
 
 #include "vector3.h"
 
@@ -11,7 +11,7 @@ float vector_norm(vector3* vector) {
 }
 
 vector3* vector_times(vector3* vector, float scalar) {
-	vector3 *temp = malloc(sizeof(vector3));
+	vector3* temp = malloc(sizeof(vector3));
 
 	temp->x = vector->x * scalar;
 	temp->y = vector->y * scalar;
@@ -49,7 +49,14 @@ vector3* vector_normalized(vector3* vector) {
 }
 
 vector3* vector_lerp(vector3* start, vector3* end, float t) {
-	return vector_plus(vector_times(start, 1 - t), vector_times(end, t));
+	vector3* v1 = vector_times(start, 1 - t);
+	vector3* v2 = vector_times(end, t);
+	vector3* v3 = vector_plus(v1, v2);
+
+	free(v1);
+	free(v2);
+
+	return v3;
 }
 
 vector3* create_vector(int x, int y, int z) {

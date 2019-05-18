@@ -1,5 +1,5 @@
 #define ARRAY_LIST_INITIAL_SIZE 16
-#define ARRAY_LIST_SIZE_EXPAND_FACTOR 1.1
+#define ARRAY_LIST_SIZE_EXPAND_ADDEND 16
 
 typedef struct {
 	void** arr;

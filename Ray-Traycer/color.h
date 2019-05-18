@@ -1,12 +1,12 @@
 #define MAX 1
 
-struct color {
+struct color_ {
 	float r;
 	float g;
 	float b;
 };
 
-typedef struct color color;
+typedef struct color_ color;
 
 void color_clamped(color* color1);
 
