@@ -1,4 +1,7 @@
-#define MAX 1
+#ifndef COLOR
+#define COLOR
+
+#include <stdint.h>
 
 struct Color {
 	float r;
@@ -8,7 +11,9 @@ struct Color {
 
 typedef struct Color Color;
 
-void color_clamped(Color* color);
+uint32_t rgba_from_color(float r, float g, float b);
+
+Color* create_color(float r, float g, float b);
 
 Color* color_times(Color* color, float t);
 
@@ -19,3 +24,5 @@ Color* color_divide(Color* color1, Color* color2);
 Color* color_plus(Color* color1, Color* color2);
 
 Color* color_minus(Color* color1, Color* color2);
+
+#endif

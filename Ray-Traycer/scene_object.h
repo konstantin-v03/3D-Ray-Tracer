@@ -1,10 +1,12 @@
 #include "color.h"
-
-struct Scene_object {
-	Color* color;
-	void* earliest_intersection;
-};
+#include "ray.h"
 
 typedef struct Scene_object Scene_object;
 
-Scene_object* create_sphere(Color* color, float r);
+struct Scene_object {
+	Color* color;
+	float(*earliest_intersection)(Scene_object* scene_object, Ray* ray);
+	void** extra_info;
+};
+
+Scene_object* create_sphere(Color* color, Vector3* center, float* radius);

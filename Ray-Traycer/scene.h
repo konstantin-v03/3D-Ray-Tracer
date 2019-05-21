@@ -1,5 +1,5 @@
-#include "vector3.h"
 #include "array_list.h"
+#include "vector3.h"
 
 struct Image_plane {
 	Vector3* top_left;

@@ -1,5 +1,5 @@
-#include "bmp.h"
 #include "rgba_image.h"
+#include <stdio.h>
 
 BMP* generate_bmp_from_rgba(Rgba_image* rgba_image);
 Rgba_image* generate_rgba_from_bmp(BMP* bmp);
@@ -59,7 +59,7 @@ void free_rgba_image(Rgba_image* rgba_image) {
 }
 
 static BMP* generate_bmp_from_rgba(Rgba_image* rgba_image) {
-	if (rgba_image == NULL || !(rgba_image->format == BMP_RGB || rgba_image->format == BMP_RGBA)) {
+	if (rgba_image == NULL || !(rgba_image->format == BMP_TYPE_RGB || rgba_image->format == BMP_TYPE_RGBA)) {
 		return NULL;
 	}
 
@@ -69,7 +69,7 @@ static BMP* generate_bmp_from_rgba(Rgba_image* rgba_image) {
 	bmp->bmp_info_header = calloc(1, sizeof(BMPInfoHeader));
 	bmp->bmp_color_header = calloc(1, sizeof(BMPColorHeader));
 
-	if (rgba_image->format == BMP_RGB) {
+	if (rgba_image->format == BMP_TYPE_RGB) {
 		bmp->bmp_file_header->file_type = BMP_MAGIC_NUMBER;
 		bmp->bmp_file_header->offset_data = 54;
 
@@ -145,7 +145,7 @@ static Rgba_image* generate_rgba_from_bmp(BMP* bmp) {
 	rgba_image->height = bmp->bmp_info_header->height;
 
 	if (bmp->bmp_info_header->bit_count == 24) {
-		rgba_image->format = BMP_RGB;
+		rgba_image->format = BMP_TYPE_RGB;
 		rgba_image->RGBA = calloc(rgba_image->height, sizeof(uint32_t*));
 
 		for (int i = 0; i < rgba_image->height; i++) {
@@ -175,7 +175,7 @@ static Rgba_image* generate_rgba_from_bmp(BMP* bmp) {
 		}
 	}
 	else {
-		rgba_image->format = BMP_RGBA;
+		rgba_image->format = BMP_TYPE_RGBA;
 		rgba_image->RGBA = calloc(rgba_image->height, sizeof(uint32_t*));
 
 		for (int i = 0; i < rgba_image->height; i++) {

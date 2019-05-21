@@ -1,28 +1,17 @@
 #include "color.h"
 
-void color_clamped(Color* color) {
+uint32_t rgba_from_color(float r, float g, float b) {
+	return (int)(b * 255) + ((int)(g * 255) << 8) + ((int)(r * 255) << 16) + (255 << 24);
+}
 
-	if (color->r < 0) {
-		color->r = 0;
-	}
-	else if (color->r > MAX) {
-		color->r = MAX;
-	}
+Color* create_color(float r, float g, float b) {
+	Color* color = malloc(sizeof(Color));
 
-	if (color->b < 0) {
-		color->b = 0;
-	}
-	else if (color->b > MAX) {
-		color->b = MAX;
-	}
+	color->r = r;
+	color->g = g;
+	color->b = b;
 
-	if (color->g < 0) {
-		color->g = 0;
-	}
-	else if (color->g > MAX) {
-		color->g = MAX;
-	}
-
+	return color;
 }
 
 Color* color_times(Color* color, float t) {

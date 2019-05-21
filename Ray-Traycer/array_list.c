@@ -13,6 +13,10 @@ Array_list* array_list_init() {
 	return array_list;
 }
 
+int array_list_size(Array_list* array_list) {
+	return array_list->filled_size;
+}
+
 void array_list_add(Array_list* array_list, void* ptr) {
 	if (array_list->filled_size >= array_list->size)
 		array_list_expand(array_list);

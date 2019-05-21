@@ -2,8 +2,8 @@
 
 #define BMP_MAGIC_NUMBER 19778
 
-#define BMP_RGB 1
-#define BMP_RGBA 2
+#define BMP_TYPE_RGB 1
+#define BMP_TYPE_RGBA 2
 
 #define BMP_RED_MASK 0x00ff0000
 #define BMP_GREEN_MASK 0x0000ff00

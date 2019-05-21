@@ -1,5 +1,4 @@
 #include <math.h>
-
 #include "vector3.h"
 
 float vector3_dot(Vector3* vector1, Vector3* vector2) {

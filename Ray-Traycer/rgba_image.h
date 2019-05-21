@@ -1,9 +1,7 @@
 #include <stdint.h>
+#include "bmp.h"
 
 #define BMP_TYPE 1
-
-#define BMP_RGB 1
-#define BMP_RGBA 2
 
 struct Rgba_image {
 	int width;
