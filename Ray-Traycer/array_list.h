@@ -1,3 +1,6 @@
+#ifndef ARRAY_LIST
+#define ARRAY_LIST
+
 #define ARRAY_LIST_INITIAL_SIZE 16
 #define ARRAY_LIST_SIZE_EXPAND_ADDEND 16
 
@@ -18,3 +21,5 @@ void array_list_add(Array_list* array_list, void* ptr);
 void* array_list_get(Array_list* array_list, int index);
 
 void array_list_remove(Array_list* array_list, int index);
+
+#endif 

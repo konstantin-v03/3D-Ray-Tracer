@@ -1,19 +1,8 @@
 #include <stdint.h>
 #include "ray.h"
 
-Vector3* ray_at(Ray* ray, float t) {
-	Vector3* v1 = vector3_times(ray->dir, t);
-	Vector3* v2 = vector3_plus(ray->origin, v1);
+Vector3 ray_at(Ray* ray, float t) {
+	Vector3 vector = vector3_times(ray->dir, t);
 
-	free(v1);
-	
-	return v2;
-}
-
-void free_ray(Ray* ray) {
-	if (ray == NULL)
-		return;
-	free(ray->origin);
-	free(ray->dir);
-	free(ray);
+	return vector3_plus(ray->origin, &vector);
 }

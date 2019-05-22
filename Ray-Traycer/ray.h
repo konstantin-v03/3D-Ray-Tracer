@@ -10,8 +10,6 @@ struct Ray {
 
 typedef struct Ray Ray;
 
-Vector3* ray_at(Ray* ray, float t);
-
-void free_ray(Ray* ray);
+Vector3 ray_at(Ray* ray, float t);
 
 #endif
