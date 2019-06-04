@@ -2,17 +2,17 @@
 #include "vector3.h"
 
 struct Image_plane {
-	Vector3* top_left;
-	Vector3* top_right;
-	Vector3* bottom_left;
-	Vector3* bottom_right;
+	Vector3 top_left;
+	Vector3 top_right;
+	Vector3 bottom_left;
+	Vector3 bottom_right;
 };
 
 typedef struct Image_plane Image_plane;
 
 struct Scene {
-	Vector3* camera;
-	Image_plane* image_plane;
+	Vector3 camera;
+	Image_plane image_plane;
 	Array_list* objects;
 };
 

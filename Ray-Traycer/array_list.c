@@ -13,6 +13,14 @@ Array_list* array_list_init() {
 	return array_list;
 }
 
+void free_array_list(Array_list* array_list) {
+	if (array_list == NULL) {
+		return;
+	}
+
+	free(array_list->arr);
+}
+
 int array_list_size(Array_list* array_list) {
 	return array_list->filled_size;
 }

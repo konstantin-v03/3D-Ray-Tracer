@@ -10,17 +10,19 @@ Color traced_value_at_pixel(Ray_tracer* tracer, int x, int y) {
 	float xt = (float)x / tracer->width;
 	float yt = (float)y / tracer->height;
 
-	Vector3 top = vector3_lerp(tracer->scene->image_plane->top_left, tracer->scene->image_plane->top_right, xt);
+	Vector3 v = tracer->scene->camera;
 
-	Vector3 bottom = vector3_lerp(tracer->scene->image_plane->bottom_left, tracer->scene->image_plane->bottom_right, xt);
+	Vector3 top = vector3_lerp(tracer->scene->image_plane.top_left, tracer->scene->image_plane.top_right, xt);
 
-	Vector3 point = vector3_lerp(&top, &bottom , yt);
+	Vector3 bottom = vector3_lerp(tracer->scene->image_plane.bottom_left, tracer->scene->image_plane.bottom_right, xt);
 
-	Vector3 dir = vector3_minus(&point, tracer->scene->camera);
+	Vector3 point = vector3_lerp(top, bottom , yt);
+
+	Vector3 dir = vector3_minus(point, tracer->scene->camera);
 
 	Ray ray;
-	ray.origin = &point;
-	ray.dir = &dir;
+	ray.origin = point;
+	ray.dir = dir;
 
     return color_from_ray_hit(tracer->scene, &ray);
 }
@@ -61,7 +63,7 @@ static Color color_from_ray_hit(Scene* scene, Ray* ray) {
 	Vector3 ray1 = ray_at(ray, ray_hit.t);
 	Vector3 normalized = scene_object_normat_at(ray_hit.scene_object, &ray1);
 
-	ray_hit.normalized = &normalized;
+	ray_hit.normalized = normalized;
 
-	return *ray_hit.scene_object->color;
+	return ray_hit.scene_object->color;
 }

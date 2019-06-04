@@ -2,7 +2,7 @@
 
 struct Ray_hit{
 	Scene_object* scene_object;
-	Vector3* normalized;
+	Vector3 normalized;
 	float t;
 };
 

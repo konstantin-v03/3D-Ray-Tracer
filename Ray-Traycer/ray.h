@@ -4,8 +4,8 @@
 #include "vector3.h"
 
 struct Ray {
-	Vector3* origin;
-	Vector3* dir;
+	Vector3 origin;
+	Vector3 dir;
 };
 
 typedef struct Ray Ray;

@@ -7,8 +7,8 @@
 typedef struct Scene_object Scene_object;
 
 struct Scene_object {
-	Vector3* center;
-	Color* color;
+	Vector3 center;
+	Color color;
 	float(*earliest_intersection)(Scene_object* scene_object, Ray* ray);
 	void** extra_info;
 };
