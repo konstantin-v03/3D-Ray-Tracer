@@ -3,21 +3,36 @@
 #include "ray_tracer.h"
 #include "rgba_image.h"
 #include "sphere.h"
+#include "light.h"
 
 int main() {
 
 	Scene scene;
 	scene.camera = create_vector3(0, 0, 0);
 	scene.image_plane = (Image_plane) { create_vector3(2, -4, 4), create_vector3(2, 4, 4), create_vector3(2, -4, -4), create_vector3(2, 4, -4) };
+	scene.kAmbientLight = create_color(0.5, 0.5, 0.5);
 	scene.objects = array_list_init();
+	scene.lights = array_list_init();
 
-	Scene_object* sphere = create_sphere(create_color(1, 0, 0), create_vector3(5, 0, 1), 0.5);
-	Scene_object* sphere1 = create_sphere(create_color(0, 1, 0), create_vector3(6, 1, 2), 0.5);
-	Scene_object* sphere2 = create_sphere(create_color(0, 0, 1), create_vector3(7, 2, 3), 0.5);
+	Scene_object* sphere = create_sphere(create_color(1, 0, 0), create_vector3(10, 0, 1), 
+		(Material){ create_color(0.5, 0.5, 0.5), create_color(0.5, 0.5, 0.5), create_color(0.5, 0.5, 0.5), create_color(0.5, 0.5, 0.5)}
+	, 0.5);
+
+	Scene_object* sphere1 = create_sphere(create_color(0, 1, 0), create_vector3(12, 1, 2), 
+		(Material) {create_color(0.7, 0.7, 0.7), create_color(0.7, 0.7, 0.7), create_color(0.7, 0.7, 0.7), create_color(0.7, 0.7, 0.7)}
+	, 0.5);
+
+	Scene_object* sphere2 = create_sphere(create_color(0, 0, 1), create_vector3(14, 2, 3), 
+		(Material) {create_color(0.3, 0.3, 0.3), create_color(0.5, 0.5, 0.5), create_color(0.5, 0.5, 0.5), create_color(0.5, 0.5, 0.5)}
+	, 0.5);
 
 	array_list_add(scene.objects, sphere);
 	array_list_add(scene.objects, sphere1);
 	array_list_add(scene.objects, sphere2);
+
+	Light light = create_light(create_vector3(4, 0, 1), create_color(0.5, 0.5, 0.5), create_color(0.5, 0.5, 0.5));
+
+	array_list_add(scene.lights, &light);
 
 	Ray_tracer ray_tracer;
 	ray_tracer.width = 1000;
@@ -47,5 +62,6 @@ int main() {
 
 	free_rgba_image(rgba_image);
 
+	_getch();
 	return 0;
 }

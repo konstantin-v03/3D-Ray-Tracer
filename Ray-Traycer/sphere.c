@@ -1,13 +1,20 @@
 #include <math.h>
 #include "sphere.h"
+#include <stdio.h>
 
 float sphere_earliest_intersection(Scene_object* sphere, Ray* ray);
 
-Scene_object* create_sphere(Color color, Vector3 center, float radius) {
+Scene_object* create_sphere(Color color, Vector3 center, Material material, float radius) {
 	Scene_object* sphere = malloc(sizeof(Scene_object));
 
 	sphere->color = color;
 	sphere->center = center;
+
+	sphere->material.kAmbient = material.kAmbient;
+	sphere->material.kDiffuse = material.kDiffuse;
+	sphere->material.kSpecular = material.kSpecular;
+	sphere->material.kReflection = material.kReflection;
+	
 	sphere->extra_info = calloc(1, sizeof(void*));
 	sphere->extra_info[0] = malloc(sizeof(float));
 	*((float*)sphere->extra_info[0]) = radius;
@@ -40,13 +47,15 @@ static float sphere_earliest_intersection(Scene_object* sphere, Ray* ray) {
 	if (d > 0) {
 		float sqrt = sqrtf(d);
 
-		float x1 = -b + sqrt / 2 * a;
-		float x2 = -b - sqrt / 2 * a;
+		float x1 = (-b + sqrt) / (2 * a);
+		float x2 = (-b - sqrt) / (2 * a);
 
 		if (x1 > x2) {
+			printf("%f\n", x2);
 			return x2;
 		}
 		else {
+			printf("%f\n", x1);
 			return x1;
 		}
 	}

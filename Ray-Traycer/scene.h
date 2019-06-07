@@ -13,7 +13,9 @@ typedef struct Image_plane Image_plane;
 struct Scene {
 	Vector3 camera;
 	Image_plane image_plane;
+	Color kAmbientLight;
 	Array_list* objects;
+	Array_list* lights;
 };
 
 typedef struct Scene Scene;

@@ -3,6 +3,8 @@
 #include "ray_tracer.h"
 #include "ray_hit.h"
 #include "ray.h"
+#include "material.h"
+#include "light.h"
 
 Color color_from_ray_hit(Scene* scene, Ray* ray);
 
@@ -16,7 +18,7 @@ Color traced_value_at_pixel(Ray_tracer* tracer, int x, int y) {
 
 	Vector3 bottom = vector3_lerp(tracer->scene->image_plane.bottom_left, tracer->scene->image_plane.bottom_right, xt);
 
-	Vector3 point = vector3_lerp(top, bottom , yt);
+	Vector3 point = vector3_lerp(top, bottom, yt);
 
 	Vector3 dir = vector3_minus(point, tracer->scene->camera);
 
@@ -24,7 +26,34 @@ Color traced_value_at_pixel(Ray_tracer* tracer, int x, int y) {
 	ray.origin = point;
 	ray.dir = dir;
 
-    return color_from_ray_hit(tracer->scene, &ray);
+	return color_from_ray_hit(tracer->scene, &ray);
+}
+
+static Color phong_lighting_at_point(Scene* scene, Scene_object* scene_object, Vector3 point, Vector3 normal, Vector3 view) {
+
+	Light* light;
+	Color lightContributions = {0, 0, 0};
+	Vector3 l, r;
+	Color diffuse, specular;
+
+	for (int i = 0; i < scene->lights->filled_size; i++) {
+		light = (Light*)array_list_get(scene->lights, i);
+
+		if (vector3_dot(vector3_minus(light->position, point), normal) < 0){
+			continue;
+		}
+
+		l = vector3_minus(light->position, point);
+		r = vector3_minus(vector3_times(normal, (vector3_dot(normal, l) * 2)), l);
+
+		diffuse = color_times_c(light->intensityDiffuse, scene_object->material.kDiffuse);
+
+		specular = color_times_c(light->intensitySpecular, scene_object->material.kSpecular);
+		
+		lightContributions = color_plus(lightContributions, color_plus(diffuse, specular));
+	}
+
+	return color_clamped(color_plus(lightContributions, color_times_c(scene_object->material.kAmbient, scene->kAmbientLight)));
 }
 
 static Color color_from_ray_hit(Scene* scene, Ray* ray) {
@@ -60,10 +89,7 @@ static Color color_from_ray_hit(Scene* scene, Ray* ray) {
 		return COLOR_NULL_INSTANCE;
 	}
 
-	Vector3 ray1 = ray_at(ray, ray_hit.t);
-	Vector3 normalized = scene_object_normat_at(ray_hit.scene_object, &ray1);
+	ray_hit.normalized = scene_object_normat_at(ray_hit.scene_object, ray_at(ray, ray_hit.t));
 
-	ray_hit.normalized = normalized;
-
-	return ray_hit.scene_object->color;
+	return phong_lighting_at_point(scene, ray_hit.scene_object, ray_at(ray, ray_hit.t), ray_hit.normalized, vector3_normalized(vector3_inverted(ray->dir)));
 }
