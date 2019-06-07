@@ -40,13 +40,11 @@ Color create_color(float r, float g, float b) {
 }
 
 Color color_times(Color color, float t) {
-	Color temp;
+	color.r = color.r * t;
+	color.g = color.g * t;
+	color.b = color.b * t;
 
-	temp.r = color.r * t;
-	temp.g = color.g * t;
-	temp.b = color.b * t;
-
-	return temp;
+	return color;
 }
 
 Color color_times_c(Color color1, Color color2) {

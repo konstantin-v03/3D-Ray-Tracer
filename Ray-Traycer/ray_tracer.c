@@ -5,6 +5,8 @@
 #include "ray.h"
 #include "material.h"
 #include "light.h"
+#include <math.h>
+#include <stdio.h>
 
 Color color_from_ray_hit(Scene* scene, Ray* ray);
 
@@ -30,7 +32,6 @@ Color traced_value_at_pixel(Ray_tracer* tracer, int x, int y) {
 }
 
 static Color phong_lighting_at_point(Scene* scene, Scene_object* scene_object, Vector3 point, Vector3 normal, Vector3 view) {
-
 	Light* light;
 	Color lightContributions = {0, 0, 0};
 	Vector3 l, r;
@@ -38,22 +39,39 @@ static Color phong_lighting_at_point(Scene* scene, Scene_object* scene_object, V
 
 	for (int i = 0; i < scene->lights->filled_size; i++) {
 		light = (Light*)array_list_get(scene->lights, i);
-
+		
 		if (vector3_dot(vector3_minus(light->position, point), normal) < 0){
 			continue;
 		}
 
-		l = vector3_minus(light->position, point);
-		r = vector3_minus(vector3_times(normal, (vector3_dot(normal, l) * 2)), l);
+		//printf("true\n");
 
-		diffuse = color_times_c(light->intensityDiffuse, scene_object->material.kDiffuse);
+		l = vector3_normalized(vector3_minus(light->position, point));
 
-		specular = color_times_c(light->intensitySpecular, scene_object->material.kSpecular);
+		r = vector3_minus(vector3_times(normal, (vector3_dot(l, normal) * 2)), l);
+
+		diffuse = color_times(color_times_c(light->intensityDiffuse, scene_object->material.kDiffuse), vector3_dot(l, normal));
+
+		float p = pow(vector3_dot(r, view), scene_object->material.alpha);
+
+		specular = color_times(color_times_c(light->intensitySpecular, scene_object->material.kSpecular), p);
 		
 		lightContributions = color_plus(lightContributions, color_plus(diffuse, specular));
 	}
 
-	return color_clamped(color_plus(lightContributions, color_times_c(scene_object->material.kAmbient, scene->kAmbientLight)));
+	//printf("r %f g %f b %f \n", lightContributions.r, lightContributions.g, lightContributions.b);
+
+	Color c2 = color_times_c(scene_object->material.kAmbient, scene->kAmbientLight);
+
+	Color c1 = color_plus(lightContributions, c2);
+
+	//printf("r %f g %f b %f \n", c1.r, c1.g, c1.b);
+
+	//printf("r %f g %f b %f \n", c2.r, c2.g, c2.b);
+
+	//printf("---\n");
+
+	return color_clamped(c1);
 }
 
 static Color color_from_ray_hit(Scene* scene, Ray* ray) {
