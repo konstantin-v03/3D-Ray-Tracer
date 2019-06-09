@@ -40,29 +40,27 @@ Color create_color(float r, float g, float b) {
 }
 
 Color color_times(Color color, float t) {
-	color.r = color.r * t;
-	color.g = color.g * t;
-	color.b = color.b * t;
+	color.r *= t;
+	color.g *= t;
+	color.b *= t;
 
 	return color;
 }
 
 Color color_times_c(Color color1, Color color2) {
-	Color temp;
+	color1.r *= color2.r;
+	color1.g *= color2.g;
+	color1.b *= color2.b;
 
-	temp.r = color1.r * color2.r;
-	temp.g = color1.g * color2.r;
-	temp.b = color1.b * color2.r;
-
-	return temp;
+	return color1;
 }
 
 Color color_divide(Color color1, Color color2) {
 	Color temp;
 
 	temp.r = color1.r / color2.r;
-	temp.g = color1.g / color2.r;
-	temp.b = color1.b / color2.r;
+	temp.g = color1.g / color2.g;
+	temp.b = color1.b / color2.b;
 
 	return temp;
 }
@@ -71,8 +69,8 @@ Color color_plus(Color color1, Color color2) {
 	Color temp;
 
 	temp.r = color1.r + color2.r;
-	temp.g = color1.g + color2.r;
-	temp.b = color1.b + color2.r;
+	temp.g = color1.g + color2.g;
+	temp.b = color1.b + color2.b;
 
 	return temp;
 }
@@ -81,8 +79,8 @@ Color color_minus(Color color1, Color color2) {
 	Color temp;
 
 	temp.r = color1.r - color2.r;
-	temp.g = color1.g - color2.r;
-	temp.b = color1.b - color2.r;
+	temp.g = color1.g - color2.g;
+	temp.b = color1.b - color2.b;
 
 	return temp;
 }

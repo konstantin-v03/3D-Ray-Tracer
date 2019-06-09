@@ -50,11 +50,20 @@ static float sphere_earliest_intersection(Scene_object* sphere, Ray* ray) {
 		float x1 = (-b + sqrt) / (2 * a);
 		float x2 = (-b - sqrt) / (2 * a);
 
+		if (x1 < 0 && x2 >= 0) {
+			return x2;
+		}
+		else if (x2 < 0 && x1 >= 0) {
+			return x1;
+		}
+		else if(x1 < 0 && x2 < 0){
+			return -1;
+		}
+
 		if (x1 > x2) {
 			return x2;
 		}
 		else {
-
 			return x1;
 		}
 	}
