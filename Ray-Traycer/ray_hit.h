@@ -1,3 +1,6 @@
+#ifndef RAY_HIT
+#define RAY_HIT
+
 #include "scene_object.h"
 
 struct Ray_hit{
@@ -7,3 +10,5 @@ struct Ray_hit{
 };
 
 typedef struct Ray_hit Ray_hit;
+
+#endif

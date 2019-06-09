@@ -82,7 +82,7 @@ static Color phong_lighting_at_point(Scene* scene, Scene_object* scene_object, V
 	Color diffuse, specular;
 
 	for (int i = 0; i < scene->lights->filled_size; i++) {
-		light = (Light*)array_list_get(scene->lights, i);
+		light = array_list_get(scene->lights, i);
 
 		if (vector3_dot(vector3_minus(light->position, point), normal) < 0) {
 			continue;

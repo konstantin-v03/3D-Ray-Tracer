@@ -9,30 +9,30 @@ int main() {
 
 	Scene scene;
 	scene.camera = create_vector3(0, 0, 0);
-	scene.image_plane = (Image_plane) { create_vector3(2, -4, 4), create_vector3(2, 4, 4), create_vector3(2, -4, -4), create_vector3(2, 4, -4) };
+	scene.image_plane = (Image_plane) { create_vector3(3, -4, 4), create_vector3(3, 4, 4), create_vector3(3, -4, -4), create_vector3(3, 4, -4) };
 	scene.kAmbientLight = create_color(0, 0, 0);
 	scene.objects = array_list_init();
 	scene.lights = array_list_init();
 
 	Scene_object* sphere = create_sphere(create_vector3(4, 0, 1), 
-		create_material(create_color(0.7, 0.1, 0.1), create_color(0.4, 0.1, 0.1), create_color(0.7, 0.7, 0.7), create_color(0.9, 0.5, 0.5), 100)
+		create_material(create_color(0.2, 0.3, 0.2), create_color(0.6, 0.2, 0.3), create_color(0.7, 0.7, 0.7), create_color(0.9, 0.5, 0.5), 25)
 		, 1);
 
 	Scene_object* sphere1 = create_sphere(create_vector3(5, 2, 2), 
-		create_material(create_color(0.05, 0.4, 0.1), create_color(0.3, 0.9, 0.1), create_color(0.2, 0.3, 0.7), create_color(0.7, 0.7, 0.7), 25)
+		create_material(create_color(0.5, 0.4, 0.1), create_color(0.3, 0.9, 0.1), create_color(0.2, 0.3, 0.7), create_color(0.7, 0.7, 0.7), 25)
 	, 1);
 
 	Scene_object* sphere2 = create_sphere(create_vector3(6, 3, 3), 
-		create_material(create_color(0.5, 0.3, 0.1), create_color(0.93, 0.52, 0.31), create_color(0.54, 0.2, 0.5), create_color(0.5, 0.5, 0.5), 50)
+		create_material(create_color(0.5, 0.3, 0.1), create_color(0.93, 0.52, 0.31), create_color(0.54, 0.2, 0.5), create_color(0.5, 0.5, 0.5), 25)
 	, 1);
 
 	array_list_add(scene.objects, sphere);
 	array_list_add(scene.objects, sphere1);
 	array_list_add(scene.objects, sphere2);
 
-	Light light = create_light(create_vector3(1, 0, 0), create_color(0.7, 0.7, 0.7), create_color(0.8, 0.8, 0.8));
+	Light light = create_light(create_vector3(1, 1, 1), create_color(0.7, 0.7, 0.7), create_color(0.8, 0.8, 0.8));
 
-	Light light1 = create_light(create_vector3(3, 3, 1), create_color(0.3, 0.2, 0.1), create_color(0.1, 0.9, 0.3));
+	Light light1 = create_light(create_vector3(7, 7, 1), create_color(0.3, 0.2, 0.1), create_color(0.1, 0.9, 0.3));
 
 	array_list_add(scene.lights, &light);
 	array_list_add(scene.lights, &light1);

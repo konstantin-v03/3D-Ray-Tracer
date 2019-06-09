@@ -56,31 +56,25 @@ Color color_times_c(Color color1, Color color2) {
 }
 
 Color color_divide(Color color1, Color color2) {
-	Color temp;
+    color1.r /= color2.r;
+	color1.g /= color2.g;
+	color1.b /= color2.b;
 
-	temp.r = color1.r / color2.r;
-	temp.g = color1.g / color2.g;
-	temp.b = color1.b / color2.b;
-
-	return temp;
+	return color1;
 }
 
 Color color_plus(Color color1, Color color2) {
-	Color temp;
+	color1.r += color2.r;
+	color1.g += color2.g;
+    color1.b += color2.b;
 
-	temp.r = color1.r + color2.r;
-	temp.g = color1.g + color2.g;
-	temp.b = color1.b + color2.b;
-
-	return temp;
+	return color1;
 }
 
 Color color_minus(Color color1, Color color2) {
-	Color temp;
+	color1.r -= color2.r;
+	color1.g -= color2.g;
+	color1.b -= color2.b;
 
-	temp.r = color1.r - color2.r;
-	temp.g = color1.g - color2.g;
-	temp.b = color1.b - color2.b;
-
-	return temp;
+	return color1;
 }

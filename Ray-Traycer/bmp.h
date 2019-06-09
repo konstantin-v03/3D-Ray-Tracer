@@ -1,3 +1,6 @@
+#ifndef BMP_
+#define BMP_
+
 #include <stdint.h>
 
 #define BMP_MAGIC_NUMBER 19778
@@ -69,3 +72,5 @@ BMP* read_bmp_image(char* file_name);
 int write_bmp_image(BMP* bmp, char* file_name);
 
 void free_bmp(BMP* bmp);
+
+#endif

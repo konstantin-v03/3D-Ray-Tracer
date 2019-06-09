@@ -1,3 +1,6 @@
+#ifndef SCENE
+#define SCENE
+
 #include "array_list.h"
 #include "vector3.h"
 
@@ -19,3 +22,5 @@ struct Scene {
 };
 
 typedef struct Scene Scene;
+
+#endif

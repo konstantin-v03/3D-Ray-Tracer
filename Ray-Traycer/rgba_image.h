@@ -1,3 +1,6 @@
+#ifndef RGBA_IMAGE
+#define RGBA_IMAGE
+
 #include <stdint.h>
 #include "bmp.h"
 
@@ -19,3 +22,5 @@ Rgba_image* read_rgba(char* file_name, int type);
 int write_rgba(char* file_name, Rgba_image* rgba_image, int type);
 
 void free_rgba_image(Rgba_image* rgba_image);
+
+#endif
