@@ -9,4 +9,4 @@ struct Ray_tracer{
 
 typedef struct Ray_tracer Ray_tracer;
 
-Color traced_value_at_pixel(Ray_tracer* ray_tracer, int x, int y);
+void traced_scene(Scene* scene, Color** colors, int width, int height, int numBounces);

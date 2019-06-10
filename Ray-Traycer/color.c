@@ -81,7 +81,8 @@ Color color_minus(Color color1, Color color2) {
 
 int color_compare(Color color1, Color color2) {
 	if (color1.r == color2.r && color1.g == color2.g && color1.b == color2.b) {
-		return 0;
+		return 1;
 	}
-	return 1;
+
+	return 0;
 }
