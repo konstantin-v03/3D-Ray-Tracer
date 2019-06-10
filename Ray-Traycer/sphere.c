@@ -33,13 +33,13 @@ void free_sphere(Scene_object* sphere) {
 	free(sphere);
 }
 
-static float sphere_earliest_intersection(Scene_object* sphere, Ray* ray) {
+static float sphere_earliest_intersection(Scene_object* sphere, Ray ray) {
 	float radius = *((float*)(sphere->extra_info[0]));
 
-	Vector3 cPrime = vector3_minus(ray->origin, sphere->center);
+	Vector3 cPrime = vector3_minus(ray.origin, sphere->center);
 
-	float a = vector3_dot(ray->dir, ray->dir);
-	float b = 2 * vector3_dot(cPrime, ray->dir);
+	float a = vector3_dot(ray.dir, ray.dir);
+	float b = 2 * vector3_dot(cPrime, ray.dir);
 	float c = vector3_dot(cPrime, cPrime) - radius * radius;
 
 	float d = b * b - 4 * a * c;

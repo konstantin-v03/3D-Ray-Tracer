@@ -5,6 +5,7 @@
 
 #define COLOR_NULL_VALUE -1
 #define COLOR_NULL_INSTANCE (Color) {COLOR_NULL_VALUE, COLOR_NULL_VALUE, COLOR_NULL_VALUE}
+#define COLOR_BLACK (Color) {0, 0, 0}
 
 struct Color {
 	float r;
@@ -29,5 +30,7 @@ Color color_divide(Color color1, Color color2);
 Color color_plus(Color color1, Color color2);
 
 Color color_minus(Color color1, Color color2);
+
+int color_compare(Color color1, Color color2);
 
 #endif

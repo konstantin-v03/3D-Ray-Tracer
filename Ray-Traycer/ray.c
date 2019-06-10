@@ -1,8 +1,15 @@
 #include <stdint.h>
 #include "ray.h"
 
-Vector3 ray_at(Ray* ray, float t) {
-	Vector3 vector = vector3_times(ray->dir, t);
+Ray create_ray(Vector3 origin, Vector3 dir) {
+	Ray ray;
 
-	return vector3_plus(ray->origin, vector);
+	ray.dir = dir;
+	ray.origin = origin;
+
+	return ray;
+}
+
+Vector3 ray_at(Ray ray, float t) {
+	return vector3_plus(ray.origin, vector3_times(ray.dir, t));
 }

@@ -8,7 +8,7 @@
 #include "light.h"
 #include "ray.h"
 
-Color color_from_ray_hit(Scene* scene, Ray* ray);
+Color color_from_ray_hit(Scene* scene, Ray ray);
 
 Color phong_lighting_at_point(Scene* scene, Scene_object* scene_object, Vector3 point, Vector3 normal, Vector3 view);
 
@@ -28,14 +28,16 @@ Color traced_value_at_pixel(Ray_tracer* tracer, int x, int y) {
 
 	Vector3 dir = vector3_minus(point, tracer->scene->camera);
 
-	Ray ray;
-	ray.origin = point;
-	ray.dir = dir;
+	Color color = color_from_ray_hit(tracer->scene, create_ray(point, dir), 3);
 
-	return color_from_ray_hit(tracer->scene, &ray);
+	if (color_compare(color, COLOR_NULL_INSTANCE) == 0) {
+		return COLOR_BLACK;
+	}
+
+	return color_clamped(color_from_ray_hit(tracer->scene, create_ray(point, dir), 1));
 }
 
-static Color color_from_ray_hit(Scene* scene, Ray* ray) {
+static Color color_from_ray_hit(Scene* scene, Ray ray, int numBounces) {
 	if (scene->objects->filled_size <= 0) {
 		return COLOR_NULL_INSTANCE;
 	}
@@ -46,7 +48,6 @@ static Color color_from_ray_hit(Scene* scene, Ray* ray) {
 	
 	Scene_object* scene_object;
 	Ray_hit ray_hit; 
-	Color color;
 	float t;
 
 	ray_hit.t = -1;
@@ -72,7 +73,23 @@ static Color color_from_ray_hit(Scene* scene, Ray* ray) {
 
 	ray_hit.normalized = scene_object_normat_at(ray_hit.scene_object, ray_at(ray, ray_hit.t));
 
-	return phong_lighting_at_point(scene, ray_hit.scene_object, ray_at(ray, ray_hit.t), ray_hit.normalized, vector3_normalized(vector3_inverted(ray->dir)));
+	Vector3 view = vector3_normalized(vector3_inverted(ray.dir));
+
+	Vector3 point = ray_at(ray, ray_hit.t);
+
+	Color color = phong_lighting_at_point(scene, ray_hit.scene_object, point, ray_hit.normalized, view);;
+
+	if (numBounces > 0) {
+		Vector3 reflection = vector3_minus(vector3_times(vector3_times(ray_hit.normalized, vector3_dot(view, ray_hit.normalized)), 2), view);
+
+		Color reflectedColor = color_from_ray_hit(scene, create_ray(point, reflection), numBounces - 1);
+
+		if (color_compare(reflectedColor, COLOR_NULL_INSTANCE) != 0) {
+			color = color_plus(color, color_times_c(reflectedColor, ray_hit.scene_object->material.kReflection));
+		}
+	}
+
+	return color;
 }
 
 static Color phong_lighting_at_point(Scene* scene, Scene_object* scene_object, Vector3 point, Vector3 normal, Vector3 view) {
@@ -107,7 +124,7 @@ static Color phong_lighting_at_point(Scene* scene, Scene_object* scene_object, V
 }
 
 static int is_point_in_shadow_from_light(Scene* scene, Scene_object* scene_object, Vector3 point, Light light) {
-	Vector3 direction = vector3_normalized(vector3_minus(light.position, point));
+	Vector3 direction = vector3_minus(light.position, point);
 
 	Ray shadowRay;
 	shadowRay.dir = direction;
@@ -123,7 +140,7 @@ static int is_point_in_shadow_from_light(Scene* scene, Scene_object* scene_objec
 			continue;
 		}
 
-		if (scene_object->earliest_intersection(temp, &shadowRay) != -1) {
+		if (scene_object->earliest_intersection(temp, shadowRay) != -1 && scene_object->earliest_intersection(temp, shadowRay) <= 1) {
 			return 1;
 		}
 	}
