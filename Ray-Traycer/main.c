@@ -1,5 +1,5 @@
-#include <Windows.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "ray_tracer.h"
 #include "rgba_image.h"
 #include "sphere.h"

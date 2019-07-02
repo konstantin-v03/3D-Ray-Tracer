@@ -1,7 +1,8 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "bmp.h"
 
-int check_rgba_color_header(BMPColorHeader* bmp_color_header);
+static int check_rgba_color_header(BMPColorHeader* bmp_color_header);
 
 BMP* read_bmp_image(char* file_name) {
 	if (file_name == NULL) {

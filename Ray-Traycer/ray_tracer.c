@@ -8,13 +8,13 @@
 #include "light.h"
 #include "ray.h"
 
-Color color_from_ray_hit(Scene* scene, Ray ray, int numBounces);
+static Color color_from_ray_hit(Scene* scene, Ray ray, int numBounces);
 
-Color phong_lighting_at_point(Scene* scene, Scene_object* scene_object, Vector3 point, Vector3 normal, Vector3 view);
+static Color phong_lighting_at_point(Scene* scene, Scene_object* scene_object, Vector3 point, Vector3 normal, Vector3 view);
 
-Color traced_value_at_pixel(Ray_tracer* tracer, int x, int y, int numBounces);
+static Color traced_value_at_pixel(Ray_tracer* tracer, int x, int y, int numBounces);
 
-int is_point_in_shadow_from_light(Scene* scene, Scene_object* scene_object, Vector3 point, Light light);
+static int is_point_in_shadow_from_light(Scene* scene, Scene_object* scene_object, Vector3 point, Light light);
 
 void traced_scene(Scene* scene, Color** colors, int width, int height, int numBounces) {
 	Ray_tracer tracer;

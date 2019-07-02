@@ -1,9 +1,9 @@
 #ifndef SCENE_OBJECT
 #define SCENE_OBJECT
 
+#include "material.h"
 #include "color.h"
 #include "ray.h"
-#include "material.h"
 
 typedef struct Scene_object Scene_object;
 

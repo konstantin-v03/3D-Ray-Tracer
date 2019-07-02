@@ -1,7 +1,9 @@
 #include <stdint.h>
+#include <stdlib.h>
 #include "array_list.h"
+#include <stddef.h>//define your own NULL
 
-void array_list_expand(Array_list* array);
+static void array_list_expand(Array_list* array);
 
 Array_list* array_list_init() {
 	Array_list* array_list = malloc(sizeof(Array_list));

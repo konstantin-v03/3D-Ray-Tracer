@@ -1,8 +1,9 @@
 #include "rgba_image.h"
 #include <stdio.h>
+#include <stdlib.h>
 
-BMP* generate_bmp_from_rgba(Rgba_image* rgba_image);
-Rgba_image* generate_rgba_from_bmp(BMP* bmp);
+static BMP* generate_bmp_from_rgba(Rgba_image* rgba_image);
+static Rgba_image* generate_rgba_from_bmp(BMP* bmp);
 
 Rgba_image* create_rgba(int width, int height, int format) {
 	Rgba_image* rgba_image = malloc(sizeof(Rgba_image));
@@ -15,6 +16,8 @@ Rgba_image* create_rgba(int width, int height, int format) {
 	for (int i = 0; i < rgba_image->height; i++) {
 		rgba_image->RGBA[i] = calloc(rgba_image->width, sizeof(uint32_t));
 	}
+    
+    return rgba_image;
 }
 
 Rgba_image* read_rgba(char* file_name, int file_type) {
