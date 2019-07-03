@@ -12,6 +12,6 @@ struct Light {
 
 typedef struct Light Light;
 
-Light create_light(Vector3 position, Color intensitySpecular, Color intensityDiffuse);
+Light* create_light(Vector3 position, Color intensitySpecular, Color intensityDiffuse);
 
 #endif

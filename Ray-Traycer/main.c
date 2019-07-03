@@ -5,40 +5,22 @@
 #include "sphere.h"
 #include "light.h"
 
+char* read_file(char* filename);
+
+void print(char* t);
+
 static int height = 1000;
 static int width = 1000;
+static int num_bounces = 3;
 
 int main() {
+    char* json_text = read_file("scene.json");
 
-	Scene scene;
-	scene.camera = create_vector3(1, 0, 0);
-	scene.image_plane = (Image_plane) { create_vector3(3, -7, 7), create_vector3(3, 7, 7), create_vector3(3, -7, -7), create_vector3(3, 7, -7) };
-	scene.kAmbientLight = create_color(0.3, 0.1, 0.21);
-	scene.objects = array_list_init();
-	scene.lights = array_list_init();
+	Scene* scene = scene_from_json(json_text);
 
-	Scene_object* sphere = create_sphere(create_vector3(5, -1, 1), 
-		create_material(create_color(0.2, 0.3, 0.2), create_color(0.6, 0.2, 0.3), create_color(0.7, 0.7, 0.7), create_color(0.9, 0.5, 0.5), 100)
-		, 1);
-
-	Scene_object* sphere1 = create_sphere(create_vector3(6, 1, 2), 
-		create_material(create_color(0.5, 0.4, 0.1), create_color(0.3, 0.9, 0.1), create_color(0.2, 0.3, 0.7), create_color(0.7, 0.7, 0.7), 25)
-	, 1);
-
-	Scene_object* sphere2 = create_sphere(create_vector3(7, 2, 5), 
-		create_material(create_color(0.5, 0.3, 0.1), create_color(0.93, 0.52, 0.31), create_color(0.54, 0.2, 0.5), create_color(0.5, 0.5, 0.5), 25)
-	, 1);
-
-	array_list_add(scene.objects, sphere);
-	array_list_add(scene.objects, sphere1);
-	array_list_add(scene.objects, sphere2);
-
-	Light light = create_light(create_vector3(1, 1, 1), create_color(0.7, 0.7, 0.7), create_color(0.8, 0.8, 0.8));
-
-	Light light1 = create_light(create_vector3(7, 7, 1), create_color(0.3, 0.2, 0.1), create_color(0.1, 0.9, 0.3));
-
-	array_list_add(scene.lights, &light);
-	array_list_add(scene.lights, &light1);
+    if(scene == NULL){
+        return 1;
+    }
 
 	Color** colors = calloc(height, sizeof(Color*));
 	*colors = calloc(height, sizeof(Color*));
@@ -47,7 +29,7 @@ int main() {
 		colors[i] = calloc(width, sizeof(Color));
 	}
 
-	traced_scene(&scene, colors, height, width, 3);
+	traced_scene(scene, colors, height, width, num_bounces);
 
 	Rgba_image* rgba_image = create_rgba(height, width, BMP_TYPE_RGBA);
 	Color color;
@@ -70,13 +52,52 @@ int main() {
 
 	free(colors);
 
-	free_sphere(sphere);
-	free_sphere(sphere1);
-	free_sphere(sphere2);
+	//free_sphere(sphere);
+	//free_sphere(sphere1);
+	//free_sphere(sphere2);
+
+    free(scene);
 
 	write_rgba("traced.bmp", rgba_image, BMP_TYPE);
 
 	free_rgba_image(rgba_image);
 
 	return 0;
+}
+
+void print(char *t) {
+   if (*t == '\0')
+      return;
+   printf("%c", *t);
+   print(++t);
+}
+
+
+char* read_file(char *filename){
+   char *buffer = NULL;
+   int string_size, read_size;
+   FILE *handler = fopen(filename, "r");
+
+   if (handler)
+   {
+       fseek(handler, 0, SEEK_END);
+       string_size = ftell(handler);
+       rewind(handler);
+
+       buffer = (char*) malloc(sizeof(char) * (string_size + 1) );
+
+       read_size = fread(buffer, sizeof(char), string_size, handler);
+
+       buffer[string_size] = '\0';
+
+       if (string_size != read_size)
+       {
+           free(buffer);
+           buffer = NULL;
+       }
+
+       fclose(handler);
+    }
+
+    return buffer;
 }

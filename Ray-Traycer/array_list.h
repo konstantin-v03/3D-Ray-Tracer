@@ -4,6 +4,8 @@
 #define ARRAY_LIST_INITIAL_SIZE 16
 #define ARRAY_LIST_SIZE_EXPAND_ADDEND 16
 
+//NEEDS TO ADD ARRAY LIST FREE
+
 struct Array_list {
 	void** arr;
 	int size;

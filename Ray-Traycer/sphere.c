@@ -1,7 +1,7 @@
+#include <stdlib.h>
+#include <stdio.h>
 #include <math.h>
 #include "sphere.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 float sphere_earliest_intersection(Scene_object* sphere, Ray ray) {
 	float radius = *((float*)(sphere->extra_info[0]));
@@ -41,6 +41,13 @@ Scene_object* create_sphere(Vector3 center, Material material, float radius) {
 	Scene_object* sphere = malloc(sizeof(Scene_object));
 
 	sphere->center = center;
+
+    /*
+    printf("%f %f %f\n", material.kAmbient.r, material.kAmbient.g, material.kAmbient.b);
+    printf("%f %f %f\n", material.kDiffuse.r, material.kDiffuse.g, material.kDiffuse.b);
+    printf("%f %f %f\n", material.kSpecular.r, material.kSpecular.g, material.kSpecular.b);
+    printf("%i\n----\n", material.alpha);
+    */
 
 	sphere->material.kAmbient = material.kAmbient;
 	sphere->material.kDiffuse = material.kDiffuse;

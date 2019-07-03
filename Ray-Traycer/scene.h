@@ -16,7 +16,7 @@ typedef struct Image_plane Image_plane;
 
 struct Scene {
 	Vector3 camera;
-	Vector3 direction;
+	Vector3 direction;//??
 	Image_plane image_plane;
 	Color kAmbientLight;
 	Array_list* objects;
@@ -24,5 +24,7 @@ struct Scene {
 };
 
 typedef struct Scene Scene;
+
+Scene* scene_from_json(char* json_text);
 
 #endif
