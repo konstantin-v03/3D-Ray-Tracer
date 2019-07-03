@@ -12,8 +12,7 @@ struct Scene_object {
 	Material material;
 	void** extra_info;
 	float(*earliest_intersection)(Scene_object* scene_object, Ray ray);
+    Vector3(*normal_at)(Scene_object* scene_object, Vector3 vector);
 };
-
-Vector3 scene_object_normat_at(Scene_object* scene_object, Vector3 vector);
 
 #endif

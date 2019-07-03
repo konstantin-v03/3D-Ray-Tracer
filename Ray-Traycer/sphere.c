@@ -37,6 +37,10 @@ float sphere_earliest_intersection(Scene_object* sphere, Ray ray) {
 	return -1;
 }
 
+Vector3 sphere_normat_at(Scene_object* scene_object, Vector3 vector) {
+	return vector3_normalized(vector3_minus(vector, scene_object->center));
+}
+
 Scene_object* create_sphere(Vector3 center, Material material, float radius) {
 	Scene_object* sphere = malloc(sizeof(Scene_object));
 
@@ -52,6 +56,7 @@ Scene_object* create_sphere(Vector3 center, Material material, float radius) {
 	sphere->extra_info[0] = malloc(sizeof(float));
 	*((float*)sphere->extra_info[0]) = radius;
 	sphere->earliest_intersection = &sphere_earliest_intersection;
+    sphere->normal_at = &sphere_normat_at;
 
 	return sphere;
 }

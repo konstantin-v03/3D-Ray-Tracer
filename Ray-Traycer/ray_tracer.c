@@ -83,7 +83,7 @@ static Color color_from_ray_hit(Scene* scene, Ray ray, int numBounces) {
 		return COLOR_BLACK;
 	}
 
-	ray_hit.normalized = scene_object_normat_at(ray_hit.scene_object, ray_at(ray, ray_hit.t));
+	ray_hit.normalized = ray_hit.scene_object->normal_at(ray_hit.scene_object, ray_at(ray, ray_hit.t));
 
 	Vector3 view = vector3_normalized(vector3_inverted(ray.dir));
 
