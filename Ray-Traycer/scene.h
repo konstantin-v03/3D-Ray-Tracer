@@ -27,4 +27,6 @@ typedef struct Scene Scene;
 
 Scene* scene_from_json(char* json_text);
 
+void scene_free(Scene* scene);
+
 #endif

@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <stdlib.h>
-#include "array_list.h"
 #include <stddef.h>//define your own NULL
+#include "array_list.h"
 
 static void array_list_expand(Array_list* array);
 
@@ -13,6 +13,11 @@ Array_list* array_list_init() {
 	array_list->arr = calloc(array_list->size, sizeof(void*));
 
 	return array_list;
+}
+
+void array_list_free(Array_list* array_list){
+    free(array_list->arr);
+    free(array_list);
 }
 
 void free_array_list(Array_list* array_list) {

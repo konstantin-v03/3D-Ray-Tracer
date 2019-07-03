@@ -9,7 +9,7 @@ struct Light {
 	Color intensitySpecular;
 	Color intensityDiffuse;
 };
-
+ 
 typedef struct Light Light;
 
 Light* create_light(Vector3 position, Color intensitySpecular, Color intensityDiffuse);

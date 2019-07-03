@@ -66,8 +66,6 @@ Scene* scene_from_json(char* json_text){
     cJSON* ambient_light = cJSON_GetObjectItemCaseSensitive(json, "ambient light");
     scene->kAmbientLight = read_color(ambient_light);
 
-    printf("%f %f %f\n", scene->kAmbientLight.r, scene->kAmbientLight.b, scene->kAmbientLight.g);
-
     if(error_flag){
         goto fail;
     }
@@ -107,15 +105,31 @@ Scene* scene_from_json(char* json_text){
     
     cJSON_Delete(json);
     return scene;
+
 fail:
     cJSON_Delete(json);
     free(scene);
     return NULL;
+
 fail1:
     cJSON_Delete(json);
-    free(scene);
-    //FREE ARRAY_LIST
+    scene_free(scene);
     return NULL;
+}
+
+void scene_free(Scene* scene){
+    int objects_size = array_list_size(scene->objects);
+    int lights_size = array_list_size(scene->lights);
+
+    for(int i = 0 ; i < objects_size; i++){
+        free(array_list_get(scene->objects, i));
+    }
+
+    for(int i = 0; i < lights_size; i++){
+        free(array_list_get(scene->lights, i));
+    }
+
+    free(scene);
 }
 
 static void add_lights_to_scene(cJSON* lights, Scene* scene){
@@ -201,6 +215,12 @@ static Material read_material(cJSON* item){
     if(error_flag){
         goto fail;     
     } 
+
+    Color reflection = read_color(cJSON_GetObjectItemCaseSensitive(item, "reflection"));
+
+    if(error_flag){
+        goto fail;     
+    } 
     
     cJSON* alpha = cJSON_GetObjectItemCaseSensitive(item, "alpha");
     
@@ -211,9 +231,9 @@ static Material read_material(cJSON* item){
 
     int aplha1 = alpha->valuedouble;
 
-    return (Material){ambient, diffuse, specular, aplha1};
+    return (Material){ambient, diffuse, specular, reflection, aplha1};
 fail:
-    return (Material){{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, 0};
+    return (Material){{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0},0};
     
 }
 

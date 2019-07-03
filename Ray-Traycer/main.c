@@ -52,11 +52,7 @@ int main() {
 
 	free(colors);
 
-	//free_sphere(sphere);
-	//free_sphere(sphere1);
-	//free_sphere(sphere2);
-
-    free(scene);
+    scene_free(scene);
 
 	write_rgba("traced.bmp", rgba_image, BMP_TYPE);
 

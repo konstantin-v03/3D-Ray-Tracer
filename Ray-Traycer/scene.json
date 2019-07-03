@@ -1,0 +1,167 @@
+{
+  "camera": {
+    "x": 1,
+    "y": 0,
+    "z": 0
+  },
+  "image plane": {
+    "top left": {
+      "x": 3,
+      "y": -7,
+      "z": 7
+    },
+    "top right": {
+      "x": 3,
+      "y": 7,
+      "z": 7
+    },
+    "bottom left": {
+      "x": 3,
+      "y": -7,
+      "z": -7
+    },
+    "bottom right": {
+      "x": 3,
+      "y": 7,
+      "z": -7
+    }
+  },
+  "ambient light": {
+    "red": 0.3,
+    "green": 0.1,
+    "blue": 0.21
+  },
+  "objects": {
+    "spheres": [
+      {
+        "center": {
+          "x": 5,
+          "y": -1,
+          "z": 1
+        },
+        "material": {
+          "ambient": {
+            "red": 0.2,
+            "green": 0.3,
+            "blue": 0.2
+          },
+          "diffuse": {
+            "red": 0.6,
+            "green": 0.2,
+            "blue": 0.3
+          },
+          "specular": {
+            "red": 0.7,
+            "green": 0.7,
+            "blue": 0.7
+          },
+          "reflection": {
+            "red": 0.9,
+            "green": 0.5,
+            "blue": 0.5
+          },
+          "alpha": 100
+        },
+        "radius": 1
+      },
+    {
+        "center": {
+          "x": 6,
+          "y": 1,
+          "z": 2
+        },
+        "material": {
+          "ambient": {
+            "red": 0.5,
+            "green": 0.4,
+            "blue": 0.1
+          },
+          "diffuse": {
+            "red": 0.3,
+            "green": 0.9,
+            "blue": 0.1
+          },
+          "specular": {
+            "red": 0.2,
+            "green": 0.3,
+            "blue": 0.7
+          },
+          "reflection": {
+            "red": 0.7,
+            "green": 0.7,
+            "blue": 0.7
+          },
+          "alpha": 25
+        },
+        "radius": 1
+      },
+    {
+        "center": {
+          "x": 7,
+          "y": 2,
+          "z": 5
+        },
+        "material": {
+          "ambient": {
+            "red": 0.5,
+            "green": 0.3,
+            "blue": 0.1
+          },
+          "diffuse": {
+            "red": 0.93,
+            "green": 0.52,
+            "blue": 0.31
+          },
+          "specular": {
+            "red": 0.54,
+            "green": 0.2,
+            "blue": 0.5
+          },
+          "reflection": {
+            "red": 0.5,
+            "green": 0.5,
+            "blue": 0.5
+          },
+          "alpha": 25
+        },
+        "radius": 1
+      }
+    ]
+  },
+  "lights": [
+    {
+      "position": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "intensity specular": {
+        "red": 0.7,
+        "green": 0.7,
+        "blue": 0.7
+      },
+      "intensity diffuse": {
+        "red": 0.8,
+        "green": 0.8,
+        "blue": 0.8
+      }
+    },
+    {
+      "position": {
+        "x": 7,
+        "y": 7,
+        "z": 1
+      },
+      "intensity specular": {
+        "red": 0.3,
+        "green": 0.2,
+        "blue": 0.1
+      },
+      "intensity diffuse": {
+        "red": 0.1,
+        "green": 0.9,
+        "blue": 0.3
+      }
+    }
+  ]
+}

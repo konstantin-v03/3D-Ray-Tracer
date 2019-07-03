@@ -42,13 +42,6 @@ Scene_object* create_sphere(Vector3 center, Material material, float radius) {
 
 	sphere->center = center;
 
-    /*
-    printf("%f %f %f\n", material.kAmbient.r, material.kAmbient.g, material.kAmbient.b);
-    printf("%f %f %f\n", material.kDiffuse.r, material.kDiffuse.g, material.kDiffuse.b);
-    printf("%f %f %f\n", material.kSpecular.r, material.kSpecular.g, material.kSpecular.b);
-    printf("%i\n----\n", material.alpha);
-    */
-
 	sphere->material.kAmbient = material.kAmbient;
 	sphere->material.kDiffuse = material.kDiffuse;
 	sphere->material.kSpecular = material.kSpecular;
