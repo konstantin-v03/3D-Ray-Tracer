@@ -5,31 +5,57 @@
 #include "sphere.h"
 #include "light.h"
 
-char* read_file(char* filename);
+char* read_file(char* file_name);
+Rgba_image* traced_rgba_image(Scene* scene, int height, int width, int num_bounces);
 
-void print(char* t);
+int main(int argc, char **argv) {
+    if(argc != 6){
+        goto illegal_args;
+        return 0;
+    }    
+    
+    char* scene_json = argv[1];
+    char* traced_file_name = argv[2];
+    int width = atoi(argv[3]);
+    int height = atoi(argv[4]);
+    int num_bounces = atoi(argv[5]);
 
-static int height = 1000;
-static int width = 1000;
-static int num_bounces = 3;
+    if(width <= 0 || height <= 0 || num_bounces <= 0){
+        goto illegal_args;
+    }
 
-int main() {
-    char* json_text = read_file("scene.json");
+    char* json_text = read_file(scene_json);
 
 	Scene* scene = scene_from_json(json_text);
 
     if(scene == NULL){
-        return 1;
+        printf("Error while reading %s\n", scene_json);
+        return 0;
     }
 
-	Color** colors = calloc(height, sizeof(Color*));
+	Rgba_image* rgba_image = traced_rgba_image(scene, height, width, num_bounces);
+
+    scene_free(scene);
+
+	write_rgba(traced_file_name, rgba_image, BMP_TYPE);
+
+	free_rgba_image(rgba_image);
+
+	return 0;
+illegal_args:
+    printf("Wrong structure of arguments\nMust be:\n1) String(Scene json file name);\n2) String(Traced image file name);\n3) Positive integer(Width of traced image);\n4) Positive integer(Height of traced image);\n5) Positive integer(Num bounces);\n");
+    return 0;
+}
+
+Rgba_image* traced_rgba_image(Scene* scene, int height, int width, int num_bounces){
+    Color** colors = calloc(height, sizeof(Color*));
 	*colors = calloc(height, sizeof(Color*));
 
 	for (int i = 0; i < height; i++) {
 		colors[i] = calloc(width, sizeof(Color));
 	}
 
-	traced_scene(scene, colors, height, width, num_bounces);
+	traced_colors(scene, colors, height, width, num_bounces);
 
 	Rgba_image* rgba_image = create_rgba(height, width, BMP_TYPE_RGBA);
 	Color color;
@@ -52,37 +78,23 @@ int main() {
 
 	free(colors);
 
-    scene_free(scene);
-
-	write_rgba("traced.bmp", rgba_image, BMP_TYPE);
-
-	free_rgba_image(rgba_image);
-
-	return 0;
+    return rgba_image;
 }
 
-void print(char *t) {
-   if (*t == '\0')
-      return;
-   printf("%c", *t);
-   print(++t);
-}
-
-
-char* read_file(char *filename){
-   char *buffer = NULL;
+char* read_file(char* file_name){
+   char* buffer = NULL;
    int string_size, read_size;
-   FILE *handler = fopen(filename, "r");
+   FILE* file = fopen(file_name, "r");
 
-   if (handler)
+   if (file)
    {
-       fseek(handler, 0, SEEK_END);
-       string_size = ftell(handler);
-       rewind(handler);
+       fseek(file, 0, SEEK_END);
+       string_size = ftell(file);
+       rewind(file);
 
-       buffer = (char*) malloc(sizeof(char) * (string_size + 1) );
+       buffer = (char*) malloc(sizeof(char) * (string_size + 1));
 
-       read_size = fread(buffer, sizeof(char), string_size, handler);
+       read_size = fread(buffer, sizeof(char), string_size, file);
 
        buffer[string_size] = '\0';
 
@@ -92,7 +104,7 @@ char* read_file(char *filename){
            buffer = NULL;
        }
 
-       fclose(handler);
+       fclose(file);
     }
 
     return buffer;

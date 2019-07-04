@@ -16,7 +16,7 @@ static Color traced_value_at_pixel(Ray_tracer* tracer, int x, int y, int numBoun
 
 static int is_point_in_shadow_from_light(Scene* scene, Scene_object* scene_object, Vector3 point, Light light);
 
-void traced_scene(Scene* scene, Color** colors, int width, int height, int numBounces) {
+void traced_colors(Scene* scene, Color** colors, int width, int height, int numBounces) {
 	Ray_tracer tracer;
 
 	tracer.width = width;

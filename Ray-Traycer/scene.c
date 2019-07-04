@@ -11,6 +11,7 @@ static void add_spheres_to_scene(cJSON* json, Scene* scene);
 static Material read_material(cJSON* item);
 static Vector3 read_vector3(cJSON* item);
 static Color read_color(cJSON* item);
+
 static int error_flag = 0;
 
 Scene* scene_from_json(char* json_text){
