@@ -29,6 +29,14 @@ Color color_clamped(Color color) {
 	return color;
 }
 
+Color color_divide(Color color, float t){
+  	color.r /= t;
+	color.g /= t;
+	color.b /= t;
+
+	return color;
+}
+
 Color create_color(float r, float g, float b) {
 	Color color;
 
@@ -55,7 +63,7 @@ Color color_times_c(Color color1, Color color2) {
 	return color1;
 }
 
-Color color_divide(Color color1, Color color2) {
+Color color_divide_c(Color color1, Color color2) {
     color1.r /= color2.r;
 	color1.g /= color2.g;
 	color1.b /= color2.b;

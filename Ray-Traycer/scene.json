@@ -1,8 +1,8 @@
 {
   "camera": {
-    "x": 0,
+    "x": -1,
     "y": 0,
-    "z": 2
+    "z": 3
   },
   "image plane": {
     "top left": {
@@ -59,7 +59,7 @@
             "green": 0.5,
             "blue": 0.5
           },
-          "alpha": 1
+          "alpha": 25
         },
         "radius": 1
       },
@@ -90,7 +90,7 @@
             "green": 0.37,
             "blue": 0.47
           },
-          "alpha": 2
+          "alpha": 25
         },
         "radius": 1
       },
@@ -121,7 +121,7 @@
             "green": 0.1,
             "blue": 0.3
           },
-          "alpha": 2
+          "alpha": 25
         },
         "radius": 1.5
       }
