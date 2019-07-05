@@ -140,14 +140,14 @@
         },
         "material": {
           "ambient": {
-            "red": 0.2,
-            "green": 0.3,
-            "blue": 0.2
+            "red": 0.43,
+            "green": 0.2,
+            "blue": 0.03
           },
           "diffuse": {
-            "red": 0.6,
-            "green": 0.2,
-            "blue": 0.3
+            "red": 0.3,
+            "green": 0.41,
+            "blue": 0.31
           },
           "specular": {
             "red": 0.1,

@@ -9,15 +9,17 @@
 #include "light.h"
 #include "ray.h"
 
-static Color color_from_ray_hit(Scene* scene, Ray ray, int num_bounces);
-
 static Color phong_lighting_at_point(Scene* scene, Scene_object* scene_object, Vector3 point, Vector3 normal, Vector3 view);
-
-static Color traced_value_at_position_on_image_plane(Ray_tracer* tracer, float xt, float yt, int num_bounces);
 
 static Color traced_value_at_pixel(Ray_tracer* tracer, int x, int y, int num_bounces, int num_samples_per_direction);
 
+static Color traced_value_at_position_on_image_plane(Ray_tracer* tracer, float xt, float yt, int num_bounces);
+
+static Color color_from_ray_hit(Scene* scene, Ray ray, int num_bounces);
+
 static int is_point_in_shadow_from_light(Scene* scene, Scene_object* scene_object, Vector3 point, Light light);
+
+static int num_samples_per_pixel;
 
 void traced_colors(Scene* scene, Color** colors, int width, int height, int num_bounces, int num_samples_per_direction) {
 	Ray_tracer tracer;
@@ -25,6 +27,8 @@ void traced_colors(Scene* scene, Color** colors, int width, int height, int num_
 	tracer.width = width;
 	tracer.height = height;
 	tracer.scene = scene;
+
+    num_samples_per_pixel = num_samples_per_direction * num_samples_per_direction;
 
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
@@ -34,21 +38,21 @@ void traced_colors(Scene* scene, Color** colors, int width, int height, int num_
 }
 
 static Color traced_value_at_pixel(Ray_tracer* tracer, int x, int y, int num_bounces, int num_samples_per_direction) {
-	float xt = (float)x / tracer->width;
+	float xt = (float)x / tracer->width;//???
 	float yt = (float)y / tracer->height;
 
-    float dx = 1.0 / (tracer->width * num_samples_per_direction); 
+    float dx = 1.0 / (tracer->width * num_samples_per_direction); //???
     float dy = 1.0 / (tracer->height * num_samples_per_direction);
     
     Color color = COLOR_BLACK;
 
-    for(int i = 0; i < num_samples_per_direction; i++){
-        for(int j = 0; j < num_samples_per_direction; j++){
+    for (int i = 0; i < num_samples_per_direction; i++) {
+        for (int j = 0; j < num_samples_per_direction; j++) {
             color = color_plus(color, traced_value_at_position_on_image_plane(tracer, xt + dx * i, yt + dy * j, num_bounces));
         }
     }
 
-	return color_clamped(color_divide(color, num_samples_per_direction * num_samples_per_direction));
+	return color_clamped(color_divide(color, num_samples_per_pixel));
 }
 
 
@@ -64,14 +68,14 @@ static Color traced_value_at_position_on_image_plane(Ray_tracer* tracer, float x
 	return color_clamped(color);
 }
 
-static Color color_from_ray_hit(Scene* scene, Ray ray, int numBounces) {
+static Color color_from_ray_hit(Scene* scene, Ray ray, int num_bounces) {
+	int count_objects = array_list_size(scene->objects);
+
 	if (scene->objects->filled_size <= 0) {
 		return COLOR_BLACK;
 	}
 
 	Array_list* objects = scene->objects;
-
-	int count_objects = array_list_size(objects);
 	
 	Scene_object* scene_object;
 	Ray_hit ray_hit; 
@@ -106,12 +110,12 @@ static Color color_from_ray_hit(Scene* scene, Ray ray, int numBounces) {
 
 	Color color = phong_lighting_at_point(scene, ray_hit.scene_object, point, ray_hit.normalized, view);;
 
-	if (numBounces > 0) {
+	if (num_bounces > 0) {
 		Vector3 reflection = vector3_minus(vector3_times(vector3_times(ray_hit.normalized, vector3_dot(view, ray_hit.normalized)), 2), view);
 
-		Color reflectedColor = color_from_ray_hit(scene, create_ray(point, reflection), numBounces - 1);
+		Color reflectedColor = color_from_ray_hit(scene, create_ray(point, reflection), num_bounces - 1);
 
-		if (color_compare(reflectedColor, COLOR_NULL_INSTANCE) == 0) {
+		if (color_compare(reflectedColor, COLOR_BLACK) == 0) {
 			color = color_plus(color, color_times_c(reflectedColor, ray_hit.scene_object->material.kReflection));
 		}
 	}
@@ -168,8 +172,7 @@ static int is_point_in_shadow_from_light(Scene* scene, Scene_object* scene_objec
 			continue;
 		}
 
-		if (scene_object->earliest_intersection(temp, shadowRay) != -1 && temp->earliest_intersection(temp, shadowRay) < 1 
-&& temp->earliest_intersection(temp, shadowRay) > 0) {
+		if (scene_object->earliest_intersection(temp, shadowRay) != -1 && temp->earliest_intersection(temp, shadowRay) <= 1 && temp->earliest_intersection(temp, shadowRay) > 0) {
 			return 1;
 		}
 	}

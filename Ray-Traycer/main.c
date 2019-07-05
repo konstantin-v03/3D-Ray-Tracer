@@ -63,12 +63,7 @@ Rgba_image* traced_rgba_image(Scene* scene, int width, int height, int num_bounc
 	for (int i = 0; i < rgba_image->height; i++) {
 		for (int j = 0; j < rgba_image->width; j++) {
 			color = colors[i][j];
-			if (color.r == COLOR_NULL_VALUE && color.g == COLOR_NULL_VALUE && color.b == COLOR_NULL_VALUE) {
-				rgba_image->RGBA[i][j] = rgba_from_color(0, 0, 0);
-			}
-			else {
-				rgba_image->RGBA[i][j] = rgba_from_color(color.r, color.g, color.b);
-			}
+		    rgba_image->RGBA[i][j] = rgba_from_color(color.r, color.g, color.b);
 		}
 	}
 

@@ -3,8 +3,6 @@
 
 #include <stdint.h>
 
-#define COLOR_NULL_VALUE -1
-#define COLOR_NULL_INSTANCE (Color) {COLOR_NULL_VALUE, COLOR_NULL_VALUE, COLOR_NULL_VALUE}
 #define COLOR_BLACK (Color) {0, 0, 0}
 
 struct Color {

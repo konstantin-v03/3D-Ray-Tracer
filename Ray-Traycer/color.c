@@ -1,7 +1,7 @@
 #include "color.h"
 
 uint32_t rgba_from_color(float r, float g, float b) {
-	return (int)(b * 255) + ((int)(g * 255) << 8) + ((int)(r * 255) << 16) + (255 << 24);
+	return (int)(b * 255) + ((int)(g * 255) << 8) + ((int)(r * 255) << 16) + 4278190080;
 }
 
 Color color_clamped(Color color) {
