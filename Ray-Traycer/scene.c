@@ -2,12 +2,16 @@
 #include <stdio.h>
 #include "material.h"
 #include "sphere.h"
+#include "plane.h"
 #include "cJSON.h"
 #include "scene.h"
 #include "light.h"
 
 static void add_lights_to_scene(cJSON* lights, Scene* scene);
+
 static void add_spheres_to_scene(cJSON* json, Scene* scene);
+static void add_planes_to_scene(cJSON* planes, Scene* scene);
+
 static Material read_material(cJSON* item);
 static Vector3 read_vector3(cJSON* item);
 static Color read_color(cJSON* item);
@@ -83,11 +87,23 @@ Scene* scene_from_json(char* json_text){
         goto fail;
     }
 
+    cJSON* planes = cJSON_GetObjectItemCaseSensitive(objects, "planes");
+        
+    if(!cJSON_IsArray(planes)){
+        goto fail;
+    }
+
     scene->objects = array_list_init();
 	scene->lights = array_list_init();
 
     add_spheres_to_scene(spheres, scene);
     
+    if(error_flag){
+        goto fail1;
+    }  
+
+    add_planes_to_scene(planes, scene);
+
     if(error_flag){
         goto fail1;
     }  
@@ -119,11 +135,14 @@ fail1:
 }
 
 void scene_free(Scene* scene){
+    Scene_object* scene_object;
+
     int objects_size = array_list_size(scene->objects);
     int lights_size = array_list_size(scene->lights);
 
     for(int i = 0 ; i < objects_size; i++){
-        free(array_list_get(scene->objects, i));
+        scene_object = array_list_get(scene->objects, i);
+        scene_object->free(scene_object);
     }
 
     for(int i = 0; i < lights_size; i++){
@@ -163,6 +182,36 @@ static void add_lights_to_scene(cJSON* lights, Scene* scene){
     }
 }
 
+static void add_planes_to_scene(cJSON* planes, Scene* scene){
+    cJSON* plane = NULL; 
+    
+    Vector3 point;
+    Material material;
+    Vector3 normal;
+    
+    cJSON_ArrayForEach(plane, planes){
+        point = read_vector3(cJSON_GetObjectItemCaseSensitive(plane, "point"));
+
+        if(error_flag){
+            return;        
+        }
+
+        normal = read_vector3(cJSON_GetObjectItemCaseSensitive(plane, "normal"));
+
+        if(error_flag){
+            return;
+        }
+
+        material = read_material(cJSON_GetObjectItemCaseSensitive(plane, "material"));
+
+        if(error_flag){
+            return;        
+        }
+        
+        array_list_add(scene->objects, create_plane(normal, point, material));
+    }
+}
+
 static void add_spheres_to_scene(cJSON* spheres, Scene* scene){
     cJSON* sphere = NULL;
     cJSON* radius = NULL;  
@@ -195,7 +244,6 @@ static void add_spheres_to_scene(cJSON* spheres, Scene* scene){
         
         array_list_add(scene->objects, create_sphere(center, material, radius1));
     }
-
 }
 
 static Material read_material(cJSON* item){ 

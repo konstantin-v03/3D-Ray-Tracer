@@ -1,9 +1,8 @@
 #include <stdlib.h>
-#include <stdio.h>
 #include <math.h>
 #include "sphere.h"
 
-float sphere_earliest_intersection(Scene_object* sphere, Ray ray) {
+static float earliest_intersection(Scene_object* sphere, Ray ray) {
 	float radius = *((float*)(sphere->extra_info[0]));
 
 	Vector3 cPrime = vector3_minus(ray.origin, sphere->center);
@@ -37,8 +36,18 @@ float sphere_earliest_intersection(Scene_object* sphere, Ray ray) {
 	return -1;
 }
 
-Vector3 sphere_normat_at(Scene_object* scene_object, Vector3 vector) {
-	return vector3_normalized(vector3_minus(vector, scene_object->center));
+static Vector3 normat_at(Scene_object* sphere, Vector3 vector) {
+	return vector3_normalized(vector3_minus(vector, sphere->center));
+}
+
+static void sphere_free(Scene_object* sphere){
+    if (sphere == NULL) {
+		return;
+	}
+
+	free(sphere->extra_info[0]);
+	free(sphere->extra_info);
+	free(sphere);
 }
 
 Scene_object* create_sphere(Vector3 center, Material material, float radius) {
@@ -46,27 +55,15 @@ Scene_object* create_sphere(Vector3 center, Material material, float radius) {
 
 	sphere->center = center;
 
-	sphere->material.kAmbient = material.kAmbient;
-	sphere->material.kDiffuse = material.kDiffuse;
-	sphere->material.kSpecular = material.kSpecular;
-	sphere->material.kReflection = material.kReflection;
-	sphere->material.alpha = material.alpha;
+	sphere->material = material;
 	
 	sphere->extra_info = calloc(1, sizeof(void*));
 	sphere->extra_info[0] = malloc(sizeof(float));
 	*((float*)sphere->extra_info[0]) = radius;
-	sphere->earliest_intersection = &sphere_earliest_intersection;
-    sphere->normal_at = &sphere_normat_at;
+
+	sphere->earliest_intersection = &earliest_intersection;
+    sphere->normal_at = &normat_at;
+    sphere->free = &sphere_free;
 
 	return sphere;
-}
-
-void free_sphere(Scene_object* sphere) {
-	if (sphere == NULL) {
-		return;
-	}
-
-	free(sphere->extra_info[0]);
-	free(sphere->extra_info);
-	free(sphere);
 }

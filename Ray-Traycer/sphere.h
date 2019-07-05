@@ -6,6 +6,4 @@
 
 Scene_object* create_sphere(Vector3 center, Material material, float radius);
 
-void free_sphere(Scene_object* sphere);
-
 #endif

@@ -20,7 +20,7 @@ int main(int argc, char **argv) {
     int height = atoi(argv[4]);
     int num_bounces = atoi(argv[5]);
 
-    if(width <= 0 || height <= 0 || num_bounces <= 0){
+    if(width <= 0 || height <= 0 || num_bounces < 0){
         goto illegal_args;
     }
 
@@ -33,7 +33,7 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-	Rgba_image* rgba_image = traced_rgba_image(scene, height, width, num_bounces);
+	Rgba_image* rgba_image = traced_rgba_image(scene, width, height, num_bounces);
 
     scene_free(scene);
 
@@ -47,17 +47,17 @@ illegal_args:
     return 0;
 }
 
-Rgba_image* traced_rgba_image(Scene* scene, int height, int width, int num_bounces){
+Rgba_image* traced_rgba_image(Scene* scene, int width, int height, int num_bounces){
     Color** colors = calloc(height, sizeof(Color*));
-	*colors = calloc(height, sizeof(Color*));
+	//*colors = calloc(height, sizeof(Color*));
 
 	for (int i = 0; i < height; i++) {
 		colors[i] = calloc(width, sizeof(Color));
 	}
 
-	traced_colors(scene, colors, height, width, num_bounces);
+	traced_colors(scene, colors, width, height, num_bounces);
 
-	Rgba_image* rgba_image = create_rgba(height, width, BMP_TYPE_RGBA);
+	Rgba_image* rgba_image = create_rgba(width, height, BMP_TYPE_RGBA);
 	Color color;
 
 	for (int i = 0; i < rgba_image->height; i++) {

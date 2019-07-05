@@ -23,10 +23,6 @@ void traced_colors(Scene* scene, Color** colors, int width, int height, int numB
 	tracer.height = height;
 	tracer.scene = scene;
 
-	scene->direction = vector3_normalized(vector3_lerp(vector3_lerp(tracer.scene->image_plane.top_left, tracer.scene->image_plane.top_right, 0.5),
-		vector3_lerp(tracer.scene->image_plane.bottom_left, tracer.scene->image_plane.bottom_right, 0.5),
-		0.5));
-
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
 			colors[i][j] = traced_value_at_pixel(&tracer, j, i, numBounces);
@@ -44,7 +40,7 @@ static Color traced_value_at_pixel(Ray_tracer* tracer, int x, int y, int numBoun
 
 	Vector3 point = vector3_plus(vector3_lerp(bottom, top, yt), tracer->scene->camera);
 
-	Color color = color_from_ray_hit(tracer->scene, create_ray(point, tracer->scene->direction), numBounces);
+	Color color = color_from_ray_hit(tracer->scene, create_ray(point, vector3_minus(point, tracer->scene->camera)), numBounces);
 
 	return color_clamped(color);
 }
@@ -69,7 +65,7 @@ static Color color_from_ray_hit(Scene* scene, Ray ray, int numBounces) {
 
 		t = scene_object->earliest_intersection(scene_object, ray);
 
-		if (t == -1) {
+		if (t <= 0) {
 			continue;
 		}
 
@@ -109,8 +105,9 @@ static Color phong_lighting_at_point(Scene* scene, Scene_object* scene_object, V
 	Color lightContributions = { 0, 0, 0 };
 	Vector3 l, r;
 	Color diffuse, specular;
+    int lights_count = array_list_size(scene->lights);
 
-	for (int i = 0; i < scene->lights->filled_size; i++) {
+	for (int i = 0; i < lights_count; i++) {
 		light = array_list_get(scene->lights, i);
 
 		if (vector3_dot(vector3_minus(light->position, point), normal) < 0) {

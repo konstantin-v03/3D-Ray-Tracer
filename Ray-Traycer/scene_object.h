@@ -11,6 +11,7 @@ struct Scene_object {
 	Vector3 center;
 	Material material;
 	void** extra_info;
+    void(*free)(Scene_object* scene_object);
 	float(*earliest_intersection)(Scene_object* scene_object, Ray ray);
     Vector3(*normal_at)(Scene_object* scene_object, Vector3 vector);
 };
