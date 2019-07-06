@@ -76,9 +76,9 @@
             "blue": 0.1
           },
           "diffuse": {
-            "red": 0.3,
+            "red": 0.32,
             "green": 0.444,
-            "blue": 0.1
+            "blue": 0.23
           },
           "specular": {
             "red": 0.2,
@@ -86,7 +86,7 @@
             "blue": 0.7
           },
           "reflection": {
-            "red": 0.03,
+            "red": 0.4,
             "green": 0.37,
             "blue": 0.47
           },
@@ -131,7 +131,7 @@
         "point": {
           "x": 0,
           "y": 0,
-          "z": -5
+          "z": -4
         },
         "normal": {
           "x": 0,
@@ -155,11 +155,11 @@
             "blue": 0.07
           },
           "reflection": {
-            "red": 0.1,
+            "red": 0.4,
             "green": 0.5,
-            "blue": 0.1
+            "blue": 0.3
           },
-          "alpha": 25
+          "alpha": 34
         }
       }
     ]
