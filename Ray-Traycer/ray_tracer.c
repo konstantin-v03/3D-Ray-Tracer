@@ -15,7 +15,11 @@ static Color traced_value_at_pixel(Ray_tracer* tracer, int x, int y, int num_bou
 
 static Color traced_value_at_position_on_image_plane(Ray_tracer* tracer, float xt, float yt, int num_bounces);
 
-static Color color_from_ray_hit(Scene* scene, Ray ray, int num_bounces);
+static Color color_from_ray_hit(Scene* scene, Ray ray, int num_bounces, Scene_object* reflection_to_where);
+
+static Color color_from_any_ray_hit(Scene* scene, Ray ray, int num_bounces);
+
+static Color color_from_reflection_ray_hit(Scene* scene, Ray ray, int num_bounces, Scene_object* reflection_to_where);
 
 static int is_point_in_shadow_from_light(Scene* scene, Scene_object* scene_object, Vector3 point, Light light);
 
@@ -63,15 +67,15 @@ static Color traced_value_at_position_on_image_plane(Ray_tracer* tracer, float x
 
 	Vector3 point = vector3_plus(vector3_lerp(bottom, top, yt), tracer->scene->camera);
 
-	Color color = color_from_ray_hit(tracer->scene, create_ray(point, vector3_minus(point, tracer->scene->camera)), num_bounces);
+	Color color = color_from_any_ray_hit(tracer->scene, create_ray(point, vector3_minus(point, tracer->scene->camera)), num_bounces);
 
 	return color_clamped(color);
 }
 
-static Color color_from_ray_hit(Scene* scene, Ray ray, int num_bounces) {
+static Color color_from_ray_hit(Scene* scene, Ray ray, int num_bounces, Scene_object* reflection_to_where) {
 	int count_objects = array_list_size(scene->objects);
 
-	if (scene->objects->filled_size <= 0) {
+	if (count_objects <= 0) {
 		return COLOR_BLACK;
 	}
 
@@ -86,11 +90,15 @@ static Color color_from_ray_hit(Scene* scene, Ray ray, int num_bounces) {
 	for (int i = 0; i < count_objects; i++) {
 		scene_object = array_list_get(objects, i);
 
+        if (scene_object == reflection_to_where) {
+            continue;
+        }
+
 		t = scene_object->earliest_intersection(scene_object, ray);
 
-		if (t <= 0) {
-			continue;
-		}
+        if(t == -1){
+            continue;
+        }
 
 		if(ray_hit.t == -1 || t < ray_hit.t) {
 			ray_hit.scene_object = scene_object;
@@ -113,19 +121,27 @@ static Color color_from_ray_hit(Scene* scene, Ray ray, int num_bounces) {
 	if (num_bounces > 0) {
 		Vector3 reflection = vector3_minus(vector3_times(vector3_times(ray_hit.normalized, vector3_dot(view, ray_hit.normalized)), 2), view);
 
-		Color reflectedColor = color_from_ray_hit(scene, create_ray(point, reflection), num_bounces - 1);
-
-		if (color_compare(reflectedColor, COLOR_BLACK) == 0) {
-			color = color_plus(color, color_times_c(reflectedColor, ray_hit.scene_object->material.kReflection));
+		Color reflected_color = color_from_reflection_ray_hit(scene, create_ray(point, reflection), num_bounces - 1, ray_hit.scene_object);
+        
+		if (color_compare(reflected_color, COLOR_BLACK) == 0) {
+			color = color_plus(color, color_times_c(reflected_color, ray_hit.scene_object->material.kReflection));
 		}
 	}
 
 	return color;
 }
 
+static Color color_from_any_ray_hit(Scene* scene, Ray ray, int num_bounces){
+    return color_from_ray_hit(scene, ray, num_bounces, NULL);
+}
+
+static Color color_from_reflection_ray_hit(Scene* scene, Ray ray, int num_bounces, Scene_object* reflection_to_where){
+    return color_from_ray_hit(scene, ray, num_bounces, reflection_to_where);
+}
+
 static Color phong_lighting_at_point(Scene* scene, Scene_object* scene_object, Vector3 point, Vector3 normal, Vector3 view) {
 	Light* light;
-	Color lightContributions = COLOR_BLACK;
+	Color light_contributions = COLOR_BLACK;
 	Vector3 l, r;
 	Color diffuse, specular;
     int lights_count = array_list_size(scene->lights);
@@ -133,11 +149,7 @@ static Color phong_lighting_at_point(Scene* scene, Scene_object* scene_object, V
 	for (int i = 0; i < lights_count; i++) {
 		light = array_list_get(scene->lights, i);
 
-		if (vector3_dot(vector3_minus(light->position, point), normal) < 0) {
-			continue;
-		}
-
-		if (is_point_in_shadow_from_light(scene, scene_object, point, *light) == 1) {
+		if (vector3_dot(vector3_minus(light->position, point), normal) < 0 || is_point_in_shadow_from_light(scene, scene_object, point, *light) == 1) {
 			continue;
 		}
 
@@ -149,21 +161,22 @@ static Color phong_lighting_at_point(Scene* scene, Scene_object* scene_object, V
 
 		specular = color_times(color_times_c(light->intensitySpecular, scene_object->material.kSpecular), pow(vector3_dot(r, view), scene_object->material.alpha));
 
-		lightContributions = color_plus(lightContributions, color_plus(diffuse, specular));
+		light_contributions = color_plus(light_contributions, color_plus(diffuse, specular));
 	}
 
-	return color_clamped(color_plus(lightContributions, color_times_c(scene_object->material.kAmbient, scene->kAmbientLight)));
+	return color_clamped(color_plus(light_contributions, color_times_c(scene_object->material.kAmbient, scene->kAmbientLight)));
 }
 
 static int is_point_in_shadow_from_light(Scene* scene, Scene_object* scene_object, Vector3 point, Light light) {
 	Vector3 direction = vector3_minus(light.position, point);
 
-	Ray shadowRay;
-	shadowRay.dir = direction;
-	shadowRay.origin = point;
+	Ray shadow_ray;
+	shadow_ray.dir = direction;
+	shadow_ray.origin = point;
 
 	Scene_object* temp;
     int count_objects = array_list_size(scene->objects);
+    float t;
 
 	for (int i = 0; i < count_objects; i++) {
 		temp = array_list_get(scene->objects, i);
@@ -171,8 +184,10 @@ static int is_point_in_shadow_from_light(Scene* scene, Scene_object* scene_objec
 		if (temp == scene_object) {
 			continue;
 		}
-
-		if (scene_object->earliest_intersection(temp, shadowRay) != -1 && temp->earliest_intersection(temp, shadowRay) <= 1 && temp->earliest_intersection(temp, shadowRay) > 0) {
+        
+        t = temp->earliest_intersection(temp, shadow_ray);
+        
+		if (t != -1 && t <= 1) {
 			return 1;
 		}
 	}

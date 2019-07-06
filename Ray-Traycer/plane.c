@@ -12,7 +12,13 @@ static float earliest_intersection(Scene_object* plane, Ray ray) {
         return -1;
     }
 
-	return (vector3_dot(plane->center, normal) - vector3_dot(ray.origin, normal)) / temp;
+    float result = (vector3_dot(plane->center, normal) - vector3_dot(ray.origin, normal)) / temp;   
+    
+    if (result > 0) {
+        return result;
+    } else {
+        return -1;
+    }
 }
 
 static Vector3 normat_at(Scene_object* plane, Vector3 vector) {

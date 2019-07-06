@@ -5,8 +5,8 @@
 #include "sphere.h"
 #include "light.h"
 
-char* read_file(char* file_name);
-Rgba_image* traced_rgba_image(Scene* scene, int height, int width, int num_bounces, int num_samples_per_direction);
+static char* read_file(char* file_name);
+static Rgba_image* traced_rgba_image(Scene* scene, int height, int width, int num_bounces, int num_samples_per_direction);
 
 int main(int argc, char **argv) {
     if(argc != 7){
@@ -27,10 +27,15 @@ int main(int argc, char **argv) {
 
     char* json_text = read_file(scene_json);
 
+    if (json_text == NULL) {
+        goto error_while_reading;
+        return 0;
+    }
+
 	Scene* scene = scene_from_json(json_text);
 
     if(scene == NULL){
-        printf("Error while reading %s\n", scene_json);
+        goto error_while_reading;
         return 0;
     }
 
@@ -45,10 +50,12 @@ int main(int argc, char **argv) {
 	return 0;
 illegal_args:
     printf("Wrong structure of arguments\nMust be:\n1) String(Scene json file name);\n2) String(Traced image file name);\n3) Positive integer(Width of traced image);\n4) Positive integer(Height of traced image);\n5) Positive integer(Num bounces);\n6) Positive integer(Count samples per direction);\n");
+error_while_reading:
+    printf("Error while reading %s\n", scene_json);
     return 0;
 }
 
-Rgba_image* traced_rgba_image(Scene* scene, int width, int height, int num_bounces, int num_samples_per_direction){
+static Rgba_image* traced_rgba_image(Scene* scene, int width, int height, int num_bounces, int num_samples_per_direction){
     Color** colors = calloc(height, sizeof(Color*));
 
 	for (int i = 0; i < height; i++) {
@@ -76,10 +83,10 @@ Rgba_image* traced_rgba_image(Scene* scene, int width, int height, int num_bounc
     return rgba_image;
 }
 
-char* read_file(char* file_name){
+static char* read_file(char* file_name){
    char* buffer = NULL;
    int string_size, read_size;
-   FILE* file = fopen(file_name, "r");
+   FILE* file = fopen(file_name, "rb");
 
    if (file)
    {
