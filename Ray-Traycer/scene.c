@@ -135,10 +135,10 @@ fail1:
 }
 
 void scene_free(Scene* scene){
-    Scene_object* scene_object;
-
     int objects_size = array_list_size(scene->objects);
     int lights_size = array_list_size(scene->lights);
+
+    Scene_object* scene_object;
 
     for(int i = 0 ; i < objects_size; i++){
         scene_object = array_list_get(scene->objects, i);
@@ -148,6 +148,10 @@ void scene_free(Scene* scene){
     for(int i = 0; i < lights_size; i++){
         free(array_list_get(scene->lights, i));
     }
+       
+    array_list_free(scene->objects);
+
+    array_list_free(scene->lights);    
 
     free(scene);
 }

@@ -47,10 +47,13 @@ int main(int argc, char **argv) {
 
 	free_rgba_image(rgba_image);
 
+    free(json_text);
+
 	return 0;
 illegal_args:
     printf("Wrong structure of arguments\nMust be:\n1) String(Scene json file name);\n2) String(Traced image file name);\n3) Positive integer(Width of traced image);\n4) Positive integer(Height of traced image);\n5) Positive integer(Num bounces);\n6) Positive integer(Count samples per direction);\n");
 error_while_reading:
+    free(json_text);
     printf("Error while reading %s\n", scene_json);
     return 0;
 }
