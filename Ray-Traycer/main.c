@@ -1,5 +1,6 @@
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
 #include "ray_tracer.h"
 #include "rgba_image.h"
 #include "sphere.h"
@@ -19,9 +20,9 @@ int main(int argc, char **argv) {
     int width = atoi(argv[3]);
     int height = atoi(argv[4]);
     int num_bounces = atoi(argv[5]);
-    int num_samples_per_direction = atoi(argv[6]);
+    int num_samples_per_pixel = atoi(argv[6]);
 
-    if(width <= 0 || height <= 0 || num_bounces < 0 || num_samples_per_direction <= 0){
+    if(width <= 0 || height <= 0 || num_bounces < 0 || num_samples_per_pixel <= 0){
         goto illegal_args;
     }
 
@@ -39,7 +40,7 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-	Rgba_image* rgba_image = traced_rgba_image(scene, width, height, num_bounces, num_samples_per_direction);
+	Rgba_image* rgba_image = traced_rgba_image(scene, width, height, num_bounces, (int)sqrt(num_samples_per_pixel));
 
     scene_free(scene);
 

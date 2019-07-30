@@ -14,9 +14,9 @@
 * width of traced image
 * height of traced image
 * num bounces
-* num samples rays per pixel
+* num samples ray per pixel (root must be an integer)
 
 ```
-    ./main scene.json traced.bmp 1000 1000 10 2
+    ./main scene.json traced.bmp 1000 1000 10 4
 ```
 ![traced.bmp](traced.bmp)
