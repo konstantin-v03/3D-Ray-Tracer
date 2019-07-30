@@ -19,3 +19,4 @@
 ```
     ./main scene.json traced.bmp 1000 1000 10 2
 ```
+![traced.bmp](traced.bmp)
