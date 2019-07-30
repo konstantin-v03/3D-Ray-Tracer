@@ -1,5 +1,7 @@
 *
 !.gitignore
+!scene.json
+!traced.bmp
 !Ray-Traycer/
 !Ray-Traycer/**
 Ray-Traycer/**

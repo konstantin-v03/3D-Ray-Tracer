@@ -40,8 +40,8 @@
         },
         "material": {
           "ambient": {
-            "red": 0.2,
-            "green": 0.3,
+            "red": 0.3,
+            "green": 0.43,
             "blue": 0.2
           },
           "diffuse": {
@@ -61,7 +61,7 @@
           },
           "alpha": 25
         },
-        "radius": 1
+        "radius": 2
       },
     {
         "center": {
@@ -127,39 +127,39 @@
       }
     ],
     "planes": [
-      {
+        {
         "point": {
-          "x": 0,
+          "x": 40,
           "y": 0,
-          "z": -4
+          "z": 0
         },
         "normal": {
-          "x": 0,
+          "x": -1,
           "y": 0,
-          "z": 1
+          "z": 0
         },
         "material": {
           "ambient": {
-            "red": 0.43,
+            "red": 0.1,
             "green": 0.2,
-            "blue": 0.03
+            "blue": 0.5
           },
           "diffuse": {
-            "red": 0.3,
-            "green": 0.41,
-            "blue": 0.31
+            "red": 0.2,
+            "green": 0.05,
+            "blue": 0.41
           },
           "specular": {
             "red": 0.1,
             "green": 0.2,
-            "blue": 0.07
+            "blue": 0.37
           },
           "reflection": {
-            "red": 0.4,
-            "green": 0.5,
-            "blue": 0.3
+            "red": 0.01,
+            "green": 0.2,
+            "blue": 0.53
           },
-          "alpha": 34
+          "alpha": 3
         }
       }
     ]
